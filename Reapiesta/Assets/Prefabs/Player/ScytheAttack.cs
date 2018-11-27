@@ -30,7 +30,7 @@ public class ScytheAttack : MonoBehaviour
         {
             if (Input.GetButtonDown("Fire1"))
             {
-				cam.StartShake(0.1f,0.2f);
+				cam.SmallShake();
 				hitbox.transform.localEulerAngles = new Vector3(0,180,0);
                 hitbox.SetActive(true);
             }

@@ -17,11 +17,11 @@ public class Hurtbox : MonoBehaviour
             if (team != hit.team)
             {
                 hit.Hit(damage);
-               Debug.Log(other.name + " got hit!");
+              // Debug.Log(other.name + " got hit!");
             }
             else
             {
-                Debug.Log("Same team");
+              //  Debug.Log("Same team");
             }
         }
     }

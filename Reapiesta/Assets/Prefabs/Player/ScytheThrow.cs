@@ -76,7 +76,7 @@ public class ScytheThrow : MonoBehaviour
     {
         goal = player.position + player.forward * range;
         curState = State.Normal;
-        cam.StartShake(0.1f, 0.5f);
+        cam.SmallShake();
         hurtbox.SetActive(true);
     }
 
@@ -94,7 +94,7 @@ public class ScytheThrow : MonoBehaviour
         if (Vector3.Distance(transform.position, player.position) < 5)
         {
             curState = State.Disabled;
-            cam.StartShake(0.1f, 0.5f);
+            cam.SmallShake();
         }
     }
 }

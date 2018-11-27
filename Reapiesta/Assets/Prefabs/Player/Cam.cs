@@ -39,7 +39,6 @@ public class Cam : MonoBehaviour
             NormalCam();
         }
         Zooming();
-        angleGoal = new Vector3(Mathf.Clamp(angleGoal.x, -60, 10), angleGoal.y, angleGoal.z);
 
         lastPos = transform.position;
         if (isShaking == true)
@@ -48,12 +47,31 @@ public class Cam : MonoBehaviour
         }
     }
 
-    public void StartShake(float time,float strength)
+    void Update()
+    {
+        // It does not actuarly work though :( if somebody wants to fix it, go ahead -Casper.
+        angleGoal = new Vector3(Mathf.Clamp(angleGoal.x, -60, 10), angleGoal.y, angleGoal.z);
+        transform.eulerAngles = new Vector3(Mathf.Clamp(transform.eulerAngles.x, -60, 10), transform.eulerAngles.y, transform.eulerAngles.z);
+    }
+
+    void StartShake(float time, float strength)
     {
         CancelInvoke("StopShake");
         isShaking = true;
         shakestr = strength;
         Invoke("StopShake", time);
+    }
+
+    public void SmallShake(){
+        StartShake(0.1f,0.2f);
+    }
+
+    public void MediumShake(){
+        StartShake(0.2f,0.5f);
+    }
+
+    public void HardShake(){
+         StartShake(0.3f,1f);
     }
 
     void StopShake()
@@ -79,11 +97,11 @@ public class Cam : MonoBehaviour
     void Zooming()
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, (player.position - transform.position), out hit, Vector3.Distance(transform.position, player.position)))
+        if (Physics.Raycast(transform.position, (player.position - transform.position), out hit, Vector3.Distance(transform.position, player.position), ~LayerMask.GetMask("IgnoreCam", "Ignore Raycast")))
         {
             transform.position = hit.point;
         }
-        if (Physics.Raycast(player.position, (transform.position - player.position), out hit, Vector3.Distance(transform.position, player.position)))
+        if (Physics.Raycast(player.position, (transform.position - player.position), out hit, Vector3.Distance(transform.position, player.position), ~LayerMask.GetMask("IgnoreCam", "Ignore Raycast")))
         {
             transform.position = hit.point;
         }

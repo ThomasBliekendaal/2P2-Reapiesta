@@ -59,7 +59,7 @@ public class Shoot : MonoBehaviour
         {
             if (hit.transform.tag == "Enemy")
             {
-                cam.GetComponent<Cam>().StartShake(0.2f, 0.5f);
+                cam.GetComponent<Cam>().MediumShake();
                 Destroy(hit.transform.gameObject);
             }
         }

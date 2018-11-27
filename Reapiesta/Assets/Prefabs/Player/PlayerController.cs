@@ -107,7 +107,7 @@ public class PlayerController : MonoBehaviour
                     curState = State.Foot;
                     transform.eulerAngles = Vector3.zero;
                     Instantiate(particleSkateChange, transform.position, Quaternion.Euler(90, 0, 0), transform);
-                    cam.StartShake(0.1f, 0.5f);
+                    cam.MediumShake();
 
                     if (canSkateJump == false)
                     {
@@ -142,7 +142,7 @@ public class PlayerController : MonoBehaviour
                 transform.position += new Vector3(0, 4.1f, 0);
                 transform.Rotate(0, 0, 180);
                 canSkateJump = false;
-                cam.StartShake(0.1f, 0.5f);
+                cam.MediumShake();
             }
         }
         else
@@ -151,7 +151,7 @@ public class PlayerController : MonoBehaviour
             curState = State.SkateBoard;
             skateSpeed = 50;
             Instantiate(particleSkateChange, transform.position, Quaternion.Euler(90, 0, 0), transform);
-            cam.StartShake(0.1f, 0.5f);
+            cam.MediumShake();
         }
     }
 
@@ -160,7 +160,7 @@ public class PlayerController : MonoBehaviour
         if (canDash == true)
         {
             curState = State.Dash;
-            cam.StartShake(0.3f, 0.2f);
+            cam.MediumShake();
             for (int i = 0; i < dashInvisible.Length; i++)
             {
                 dashInvisible[i].enabled = false;
@@ -188,7 +188,6 @@ public class PlayerController : MonoBehaviour
             if (Physics.Raycast(transform.position, Vector3.down, 4) == false)
             {
                 canDash = false;
-                cam.StartShake(0.1f, 0.7f);
                 moveV3 = new Vector3(moveV3.x, jumpHeight, moveV3.z);
             }
         }
@@ -288,11 +287,11 @@ public class PlayerController : MonoBehaviour
                 if (moveV3.y > 40)
                 {
                     Instantiate(landingParticle, transform.position, transform.rotation, transform);
-                    cam.StartShake(0.1f, 2f);
+                    cam.HardShake();
                 }
                 else
                 {
-                    cam.StartShake(0.1f, 0.3f);
+                    cam.SmallShake();
                 }
                 skateSpeed /= 1.1f;
                 transform.position = hit.point + new Vector3(0, 0.01f, 0);
