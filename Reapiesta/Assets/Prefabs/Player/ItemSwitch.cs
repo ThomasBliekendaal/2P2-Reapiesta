@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.PostProcessing;
 
 public class ItemSwitch : MonoBehaviour
 {
@@ -11,12 +10,6 @@ public class ItemSwitch : MonoBehaviour
     [SerializeField] Text ui;
     [SerializeField] ScytheThrow special;
     [SerializeField] int specialDisable = 0;
-    PostProcessingBehaviour pp;
-
-    void Start()
-    {
-        pp = Camera.main.GetComponent<PostProcessingBehaviour>();
-    }
 
     void Update()
     {
@@ -53,7 +46,6 @@ public class ItemSwitch : MonoBehaviour
         }
         ui.text = transform.GetChild(curItem).name;
         Time.timeScale = 1;
-        pp.profile.motionBlur.enabled = false;
     }
 
     void ActivateSpecial()

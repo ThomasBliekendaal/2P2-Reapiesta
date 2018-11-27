@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.PostProcessing;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
@@ -28,7 +27,6 @@ public class PlayerController : MonoBehaviour
     Vector3 latePos;
     [SerializeField]
     Transform skateAngleHelper;
-    PostProcessingBehaviour pp;
     Cam cam;
     [Header("Skateboard Stats")]
     [SerializeField]
@@ -63,7 +61,6 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         cc = GetComponent<CharacterController>();
-        pp = Camera.main.GetComponent<PostProcessingBehaviour>();
         latePos = transform.position;
         cam = Camera.main.GetComponent<Cam>();
     }
@@ -108,7 +105,6 @@ public class PlayerController : MonoBehaviour
                 if (Input.GetButtonDown("Fire2"))
                 {
                     curState = State.Foot;
-                    pp.profile.chromaticAberration.enabled = false;
                     transform.eulerAngles = Vector3.zero;
                     Instantiate(particleSkateChange, transform.position, Quaternion.Euler(90, 0, 0), transform);
                     cam.StartShake(0.1f, 0.5f);
@@ -139,7 +135,6 @@ public class PlayerController : MonoBehaviour
             {
                 curState = State.SkateBoard;
                 skateSpeed = 50;
-                pp.profile.chromaticAberration.enabled = true;
                 Instantiate(particleSkateChange, transform.position, Quaternion.Euler(90, 0, 0), transform);
                 moveV3 = new Vector3(0, jumpHeight, 0);
                 skateSpeed += 50;
@@ -155,7 +150,6 @@ public class PlayerController : MonoBehaviour
             grounded = true;
             curState = State.SkateBoard;
             skateSpeed = 50;
-            pp.profile.chromaticAberration.enabled = true;
             Instantiate(particleSkateChange, transform.position, Quaternion.Euler(90, 0, 0), transform);
             cam.StartShake(0.1f, 0.5f);
         }
@@ -287,14 +281,6 @@ public class PlayerController : MonoBehaviour
             {
                 moveV3 -= Vector3.up * 5;
             }
-            //the blur on the edges
-            var ca = pp.profile.chromaticAberration.settings;
-            ca.intensity = Mathf.Lerp(ca.intensity, skateSpeed / maxSkateSpeed * 10, Time.deltaTime);
-            if (ca.intensity < 0.8f)
-            {
-                ca.intensity = Mathf.Lerp(ca.intensity, 0, Time.deltaTime);
-            }
-            pp.profile.chromaticAberration.settings = ca;
 
             //landing
             if (justSkateGrounded == false)
