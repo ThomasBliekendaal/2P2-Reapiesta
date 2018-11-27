@@ -19,6 +19,7 @@ public class ScytheThrow : MonoBehaviour
     public State curState = State.Disabled;
     [SerializeField] List<Renderer> rend;
     Cam cam;
+    [SerializeField] GameObject hurtbox;
     void Start()
     {
         player = FindObjectOfType<PlayerController>().transform;
@@ -63,6 +64,7 @@ public class ScytheThrow : MonoBehaviour
         rend[0].enabled = false;
         rend[1].enabled = false;
         transform.position = player.position;
+        hurtbox.SetActive(false);
     }
 
     void MoveToPlayer()
@@ -75,6 +77,7 @@ public class ScytheThrow : MonoBehaviour
         goal = player.position + player.forward * range;
         curState = State.Normal;
         cam.StartShake(0.1f, 0.5f);
+        hurtbox.SetActive(true);
     }
 
     void NormalThrow()
