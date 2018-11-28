@@ -35,17 +35,23 @@ public class ItemSwitch : MonoBehaviour
 
     void Scroll()
     {
-        curItem += (int)Input.mouseScrollDelta.y;
-        if (curItem > transform.childCount - 1)
+        if (Input.mouseScrollDelta.y != 0)
         {
-            curItem = 0;
+            curItem += (int)Input.mouseScrollDelta.y;
+            // if(Input.anyKeyDown == true){
+            curItem += (int)Input.GetAxis("ScrollItem");
+            //  }
+            if (curItem > transform.childCount - 1)
+            {
+                curItem = 0;
+            }
+            if (curItem < 0)
+            {
+                curItem = transform.childCount - 1;
+            }
+            ui.text = transform.GetChild(curItem).name;
+            Time.timeScale = 1;
         }
-        if (curItem < 0)
-        {
-            curItem = transform.childCount - 1;
-        }
-        ui.text = transform.GetChild(curItem).name;
-        Time.timeScale = 1;
     }
 
     void ActivateSpecial()
@@ -55,7 +61,7 @@ public class ItemSwitch : MonoBehaviour
             // special.SetActive(false);
             curItem++;
         }
-		 if (curItem == specialDisable && special.curState != ScytheThrow.State.Disabled)
+        if (curItem == specialDisable && special.curState != ScytheThrow.State.Disabled)
         {
             Scroll();
         }

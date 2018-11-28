@@ -22,24 +22,24 @@ public class Shoot : MonoBehaviour
 
     void Controll()
     {
-        if (Input.GetButtonUp("Fire1"))
+        if (Input.GetButtonUp("Attack"))
         {
             ShootNow();
             Time.timeScale = 1;
         }
-        if (Input.GetAxis("Fire1") == 0)
+        if (Input.GetAxis("Attack") == 0)
         {
             //cam.fieldOfView = Mathf.MoveTowards(cam.fieldOfView, 60, Time.deltaTime * 150);
             Time.timeScale = 1;
         }
         else
         {
-            if (plyr.cc.isGrounded == false && plyr.curState != PlayerController.State.SkateBoard)
+            if (plyr.pf.cc.isGrounded == false && plyr.pf.curState != PlayerFunctions.State.SkateBoard)
             {
                 Time.timeScale = slowMotionSpeed;
                 // cam.fieldOfView = 40;
             }
-            else if (plyr.curState == PlayerController.State.SkateBoard && plyr.grounded == false && plyr.cc.isGrounded == false)
+            else if (plyr.pf.curState == PlayerFunctions.State.SkateBoard && plyr.pf.grounded == false && plyr.pf.cc.isGrounded == false)
             {
                 Time.timeScale = slowMotionSpeed;
             }

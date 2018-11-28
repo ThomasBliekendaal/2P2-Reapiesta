@@ -15,6 +15,7 @@ public class Hitbox : MonoBehaviour
     Cam cam;
     [SerializeField] UIPercentBar uiBar;
     float maxHealth = 1;
+    [SerializeField] float stopTime = 0.01f;
 
     void Start()
     {
@@ -32,6 +33,9 @@ public class Hitbox : MonoBehaviour
         else if (hitShake == true)
         {
             cam.SmallShake();
+            //Debug.Log("hi");
+            Time.timeScale = stopTime;
+            StartCoroutine(SetTimeBack(stopTime * 10));
             if (hitParticle != null)
             {
                 Instantiate(hitParticle, transform.position, transform.rotation);
@@ -42,6 +46,12 @@ public class Hitbox : MonoBehaviour
         {
             uiBar.curPercent = curHealth / maxHealth * 100;
         }
+    }
+
+    IEnumerator SetTimeBack(float time)
+    {
+        yield return new WaitForSecondsRealtime(time);
+        Time.timeScale = 1f;
     }
 
     public virtual void Die()

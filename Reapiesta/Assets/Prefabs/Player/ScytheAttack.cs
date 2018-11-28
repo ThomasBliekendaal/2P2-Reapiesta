@@ -28,7 +28,7 @@ public class ScytheAttack : MonoBehaviour
     {
         if (hitbox.activeSelf == false)
         {
-            if (Input.GetButtonDown("Fire1"))
+            if (Input.GetButtonDown("Attack"))
             {
 				//cam.SmallShake();
 				hitbox.transform.localEulerAngles = new Vector3(0,180,0);

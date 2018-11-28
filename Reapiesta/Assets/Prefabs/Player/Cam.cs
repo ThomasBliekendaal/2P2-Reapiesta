@@ -11,7 +11,7 @@ public class Cam : MonoBehaviour
     public float rotSpeed = 10;
     public float distance = 20;
     public Vector3 offset = Vector3.zero;
-    PlayerController playerMov;
+    PlayerFunctions playerMov;
     Vector3 angleGoal;
 
     bool isShaking = false;
@@ -21,7 +21,7 @@ public class Cam : MonoBehaviour
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
-        playerMov = player.GetComponent<PlayerController>();
+        playerMov = player.GetComponent<PlayerFunctions>();
         lastPos = transform.position;
 
     }
@@ -30,7 +30,7 @@ public class Cam : MonoBehaviour
     {
         transform.position = lastPos;
         //Debug.Log(playerMov.grounded);
-        if (playerMov.curState == PlayerController.State.SkateBoard && playerMov.grounded == true)
+        if (playerMov.curState == PlayerFunctions.State.SkateBoard && playerMov.grounded == true)
         {
             SkateRotate();
         }
