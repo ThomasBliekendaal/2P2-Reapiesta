@@ -48,6 +48,7 @@ public class PlayerController : MonoBehaviour
     GameObject particleSkateChange;
     bool canSkateJump = true;
     [Header("Dashing")]
+    State stateBeforeDash = State.Foot;
     [SerializeField]
     float dashSpeed = 10;
     [SerializeField]
@@ -159,6 +160,7 @@ public class PlayerController : MonoBehaviour
     {
         if (canDash == true)
         {
+            stateBeforeDash = curState;
             curState = State.Dash;
             cam.MediumShake();
             for (int i = 0; i < dashInvisible.Length; i++)
@@ -184,7 +186,10 @@ public class PlayerController : MonoBehaviour
             {
                 dashInvisible[i].enabled = true;
             }
-            curState = State.Foot;
+            curState = stateBeforeDash;
+            if(stateBeforeDash == State.SkateBoard){
+                skateSpeed = minSkateSpeed / 2;
+            }
             if (Physics.Raycast(transform.position, Vector3.down, 4) == false)
             {
                 canDash = false;
