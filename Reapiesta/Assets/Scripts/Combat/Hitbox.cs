@@ -47,6 +47,7 @@ public class Hitbox : MonoBehaviour
     public virtual void Die()
     {
         Destroy(gameObject);
+        StaticFunctions.PlayAudio(2);
         //Debug.Log(name + " died");
         if (dieShake == true)
         {
