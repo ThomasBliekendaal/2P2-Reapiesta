@@ -7,17 +7,22 @@ public class Hitbox : MonoBehaviour
 
     [SerializeField] float curHealth = 3;
     public int team = 0;
-    [SerializeField] GameObject deathParticle;
+    public GameObject deathParticle;
     [SerializeField] GameObject hitParticle;
     [Header("ScreenShake")]
     [SerializeField] bool hitShake = false;
-    [SerializeField] bool dieShake = false;
-    Cam cam;
+    public bool dieShake = false;
+    [HideInInspector] public Cam cam;
     [SerializeField] UIPercentBar uiBar;
     float maxHealth = 1;
     [SerializeField] float stopTime = 0.01f;
 
     void Start()
+    {
+        StartStuff();
+    }
+
+    public void StartStuff()
     {
         cam = Camera.main.GetComponent<Cam>();
         maxHealth = curHealth;
@@ -33,6 +38,7 @@ public class Hitbox : MonoBehaviour
         else if (hitShake == true)
         {
             cam.SmallShake();
+            StaticFunctions.PlayAudio(8);
             //Debug.Log("hi");
             Time.timeScale = stopTime;
             StartCoroutine(SetTimeBack(stopTime * 10));

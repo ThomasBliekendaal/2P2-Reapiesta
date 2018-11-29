@@ -5,11 +5,12 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
 
-[HideInInspector] public PlayerFunctions pf;
+    [HideInInspector] public PlayerFunctions pf;
 
-void Start(){
-    pf = GetComponent<PlayerFunctions>();
-}
+    void Start()
+    {
+        pf = GetComponent<PlayerFunctions>();
+    }
     void Update()
     {
         Controll();
@@ -44,6 +45,7 @@ void Start(){
                 pf.FinalMove();
                 if (Input.GetButtonDown("Fire2"))
                 {
+                    StaticFunctions.PlayAudio(1);
                     pf.curState = PlayerFunctions.State.Foot;
                     transform.eulerAngles = Vector3.zero;
                     Instantiate(pf.particleSkateChange, transform.position, Quaternion.Euler(90, 0, 0), transform);
@@ -51,11 +53,12 @@ void Start(){
 
                     if (pf.canSkateJump == false)
                     {
-                        pf.moveV3 += new Vector3(0, pf.jumpHeight, 0);
+                        pf.moveV3 = new Vector3(pf.moveV3.x, pf.jumpHeight, pf.moveV3.z);
                     }
                 }
-                if (Input.GetButtonDown("Dash"))
+                if (Input.GetButtonDown("Dash") && pf.stamina > 30)
                 {
+                    pf.stamina -= 30;
                     pf.StartDash();
                 }
                 break;
@@ -64,7 +67,9 @@ void Start(){
                 pf.FinalMove();
                 break;
         }
+        pf.staminaBar.curPercent = pf.stamina;
+        pf.stamina = Mathf.MoveTowards(pf.stamina,100,Time.deltaTime * 10);
     }
 
-    
+
 }

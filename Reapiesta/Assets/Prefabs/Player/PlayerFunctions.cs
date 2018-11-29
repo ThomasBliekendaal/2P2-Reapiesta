@@ -56,6 +56,8 @@ public class PlayerFunctions : MonoBehaviour
     [SerializeField]
     GameObject landingParticle;
     bool canDash = true;
+    [HideInInspector] public float stamina = 100;
+    public UIPercentBar staminaBar;
 
     public void Start()
     {
@@ -76,6 +78,7 @@ public class PlayerFunctions : MonoBehaviour
             grounded = false;
             if (canSkateJump == true)
             {
+                StaticFunctions.PlayAudio(1);
                 curState = State.SkateBoard;
                 skateSpeed = 50;
                 Instantiate(particleSkateChange, transform.position, Quaternion.Euler(90, 0, 0), transform);
@@ -90,6 +93,7 @@ public class PlayerFunctions : MonoBehaviour
         }
         else
         {
+            StaticFunctions.PlayAudio(1);
             grounded = true;
             curState = State.SkateBoard;
             skateSpeed = 50;
@@ -102,6 +106,7 @@ public class PlayerFunctions : MonoBehaviour
     {
         if (canDash == true)
         {
+            StaticFunctions.PlayAudio(13);
             stateBeforeDash = curState;
             curState = State.Dash;
             cam.MediumShake();
@@ -129,7 +134,8 @@ public class PlayerFunctions : MonoBehaviour
                 dashInvisible[i].enabled = true;
             }
             curState = stateBeforeDash;
-            if(stateBeforeDash == State.SkateBoard){
+            if (stateBeforeDash == State.SkateBoard)
+            {
                 skateSpeed = minSkateSpeed / 2;
             }
             if (Physics.Raycast(transform.position, Vector3.down, 4) == false)
@@ -193,7 +199,7 @@ public class PlayerFunctions : MonoBehaviour
             {
                 if (-transform.forward.y < -0.3f)
                 {
-                  //  Debug.Log("yes");
+                    //  Debug.Log("yes");
                     skateSpeed = Mathf.MoveTowards(skateSpeed, 0, Time.deltaTime * transform.forward.y * skateDeceleration * 50);
                 }
                 else
@@ -235,10 +241,12 @@ public class PlayerFunctions : MonoBehaviour
                 {
                     Instantiate(landingParticle, transform.position, transform.rotation, transform);
                     cam.HardShake();
+                    StaticFunctions.PlayAudio(2);
                 }
                 else
                 {
                     cam.SmallShake();
+                    StaticFunctions.PlayAudio(11);
                 }
                 skateSpeed /= 1.1f;
                 transform.position = hit.point + new Vector3(0, 0.01f, 0);

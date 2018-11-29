@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/TerrainTesty.unity
+    guid: a23d27a72c87ad54481e4dd19ce7daea
   m_configObjects: {}

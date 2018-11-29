@@ -78,6 +78,7 @@ public class ScytheThrow : MonoBehaviour
         curState = State.Normal;
         cam.SmallShake();
         hurtbox.SetActive(true);
+        StaticFunctions.PlayAudio(4);
     }
 
     void NormalThrow()
@@ -93,6 +94,7 @@ public class ScytheThrow : MonoBehaviour
     {
         if (Vector3.Distance(transform.position, player.position) < 5)
         {
+            StaticFunctions.PlayAudio(1);
             curState = State.Disabled;
             cam.SmallShake();
         }

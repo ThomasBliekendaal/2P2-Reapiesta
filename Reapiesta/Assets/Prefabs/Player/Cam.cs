@@ -26,7 +26,7 @@ public class Cam : MonoBehaviour
 
     }
 
-    void LateUpdate()
+    void Update()
     {
         transform.position = lastPos;
         //Debug.Log(playerMov.grounded);
@@ -45,13 +45,6 @@ public class Cam : MonoBehaviour
         {
             Shake(shakestr);
         }
-    }
-
-    void Update()
-    {
-        // It does not actuarly work though :( if somebody wants to fix it, go ahead -Casper.
-        angleGoal = new Vector3(Mathf.Clamp(angleGoal.x, -60, 10), angleGoal.y, angleGoal.z);
-        transform.eulerAngles = new Vector3(Mathf.Clamp(transform.eulerAngles.x, -60, 10), transform.eulerAngles.y, transform.eulerAngles.z);
     }
 
     void StartShake(float time, float strength)
@@ -88,7 +81,7 @@ public class Cam : MonoBehaviour
     {
         helper.position = Vector3.Lerp(helper.position, player.position + transform.TransformDirection(offset), Time.deltaTime * speed);
         //  helper.eulerAngles += new Vector3(Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0) * Time.unscaledDeltaTime * rotSpeed;
-        angleGoal += new Vector3(Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0) * Time.unscaledDeltaTime * rotSpeed; ;
+        angleGoal += new Vector3(Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0) * Time.unscaledDeltaTime * rotSpeed;
         helper.rotation = Quaternion.Lerp(helper.rotation, Quaternion.Euler(angleGoal), Time.unscaledDeltaTime * 20);
         transform.position = helper.position + helper.TransformDirection(0, 0, distance);
         transform.LookAt(helper.position);

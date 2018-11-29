@@ -9,6 +9,7 @@ public class Shoot : MonoBehaviour
     PlayerController plyr;
     Camera cam;
     [SerializeField] float slowMotionSpeed = 0.3f;
+    bool canSlowMo = true;
     void Start()
     {
         plyr = FindObjectOfType<PlayerController>();
@@ -22,10 +23,24 @@ public class Shoot : MonoBehaviour
 
     void Controll()
     {
+        if (plyr.pf.cc.isGrounded == true && plyr.pf.curState != PlayerFunctions.State.SkateBoard)
+        {
+            canSlowMo = true;
+            //  Debug.Log("set it back 1");
+        }
+        else if (plyr.pf.curState == PlayerFunctions.State.SkateBoard && plyr.pf.grounded == true)
+        {
+            canSlowMo = true;
+            // Debug.Log("set it back 2");
+        }
         if (Input.GetButtonUp("Attack"))
         {
-            ShootNow();
             Time.timeScale = 1;
+            if (canSlowMo == true)
+            {
+                ShootNow();
+                canSlowMo = false;
+            }
         }
         if (Input.GetAxis("Attack") == 0)
         {
@@ -34,17 +49,23 @@ public class Shoot : MonoBehaviour
         }
         else
         {
-            if (plyr.pf.cc.isGrounded == false && plyr.pf.curState != PlayerFunctions.State.SkateBoard)
+            if (plyr.pf.cc.isGrounded == false && plyr.pf.curState != PlayerFunctions.State.SkateBoard && plyr.pf.stamina > 10 && canSlowMo == true)
             {
                 Time.timeScale = slowMotionSpeed;
                 // cam.fieldOfView = 40;
+                plyr.pf.stamina -= Time.unscaledDeltaTime * 50;
             }
-            else if (plyr.pf.curState == PlayerFunctions.State.SkateBoard && plyr.pf.grounded == false && plyr.pf.cc.isGrounded == false)
+            else if (plyr.pf.curState == PlayerFunctions.State.SkateBoard && plyr.pf.grounded == false && plyr.pf.cc.isGrounded == false && canSlowMo == true && plyr.pf.stamina > 10)
             {
                 Time.timeScale = slowMotionSpeed;
+                plyr.pf.stamina -= Time.unscaledDeltaTime * 50;
             }
             else
             {
+                if (canSlowMo == true)
+                {
+                    canSlowMo = false;
+                }
                 Time.timeScale = 1;
             }
         }

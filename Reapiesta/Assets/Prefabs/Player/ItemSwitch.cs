@@ -11,6 +11,11 @@ public class ItemSwitch : MonoBehaviour
     [SerializeField] ScytheThrow special;
     [SerializeField] int specialDisable = 0;
 
+    void Start()
+    {
+        ui.text = transform.GetChild(curItem).name;
+    }
+
     void Update()
     {
         Scroll();

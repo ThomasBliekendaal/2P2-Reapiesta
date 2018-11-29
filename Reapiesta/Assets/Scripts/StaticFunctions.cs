@@ -35,4 +35,9 @@ public class StaticFunctions : MonoBehaviour
         SceneManager.LoadScene(name);
     }
 
+    public static void LoadScene(bool current)
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
 }
