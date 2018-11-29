@@ -78,7 +78,7 @@ public class PlayerFunctions : MonoBehaviour
             grounded = false;
             if (canSkateJump == true)
             {
-                StaticFunctions.PlayAudio(1);
+                StaticFunctions.PlayAudio(1,false);
                 curState = State.SkateBoard;
                 skateSpeed = 50;
                 Instantiate(particleSkateChange, transform.position, Quaternion.Euler(90, 0, 0), transform);
@@ -93,7 +93,7 @@ public class PlayerFunctions : MonoBehaviour
         }
         else
         {
-            StaticFunctions.PlayAudio(1);
+            StaticFunctions.PlayAudio(1,false);
             grounded = true;
             curState = State.SkateBoard;
             skateSpeed = 50;
@@ -106,7 +106,7 @@ public class PlayerFunctions : MonoBehaviour
     {
         if (canDash == true)
         {
-            StaticFunctions.PlayAudio(13);
+            StaticFunctions.PlayAudio(13,false);
             stateBeforeDash = curState;
             curState = State.Dash;
             cam.MediumShake();
@@ -241,12 +241,12 @@ public class PlayerFunctions : MonoBehaviour
                 {
                     Instantiate(landingParticle, transform.position, transform.rotation, transform);
                     cam.HardShake();
-                    StaticFunctions.PlayAudio(2);
+                    StaticFunctions.PlayAudio(2,false);
                 }
                 else
                 {
                     cam.SmallShake();
-                    StaticFunctions.PlayAudio(11);
+                    StaticFunctions.PlayAudio(11,false);
                 }
                 skateSpeed /= 1.1f;
                 transform.position = hit.point + new Vector3(0, 0.01f, 0);

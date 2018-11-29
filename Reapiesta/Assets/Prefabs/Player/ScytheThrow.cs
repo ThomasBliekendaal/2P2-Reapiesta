@@ -74,11 +74,11 @@ public class ScytheThrow : MonoBehaviour
 
     void StartThrow()
     {
-        goal = player.position + player.forward * range;
+        goal = player.position + cam.transform.forward * range;
         curState = State.Normal;
         cam.SmallShake();
         hurtbox.SetActive(true);
-        StaticFunctions.PlayAudio(4);
+        StaticFunctions.PlayAudio(4,false);
     }
 
     void NormalThrow()
@@ -94,7 +94,7 @@ public class ScytheThrow : MonoBehaviour
     {
         if (Vector3.Distance(transform.position, player.position) < 5)
         {
-            StaticFunctions.PlayAudio(1);
+            StaticFunctions.PlayAudio(1,false);
             curState = State.Disabled;
             cam.SmallShake();
         }

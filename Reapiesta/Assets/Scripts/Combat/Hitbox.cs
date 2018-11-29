@@ -38,7 +38,7 @@ public class Hitbox : MonoBehaviour
         else if (hitShake == true)
         {
             cam.SmallShake();
-            StaticFunctions.PlayAudio(8);
+            StaticFunctions.PlayAudio(8,false);
             //Debug.Log("hi");
             Time.timeScale = stopTime;
             StartCoroutine(SetTimeBack(stopTime * 10));
@@ -63,7 +63,7 @@ public class Hitbox : MonoBehaviour
     public virtual void Die()
     {
         Destroy(gameObject);
-        StaticFunctions.PlayAudio(2);
+        StaticFunctions.PlayAudio(2,false);
         //Debug.Log(name + " died");
         if (dieShake == true)
         {

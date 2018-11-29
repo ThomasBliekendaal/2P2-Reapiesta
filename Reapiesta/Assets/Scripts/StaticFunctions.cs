@@ -10,7 +10,7 @@ public class StaticFunctions : MonoBehaviour
     public static AudioClip[] clips;
 
 
-    public static void PlayAudio(int clip)
+    public static void PlayAudio(int clip,bool printNames)
     {
         if (audioPrefab == null)
         {
@@ -24,6 +24,12 @@ public class StaticFunctions : MonoBehaviour
         newClip.clip = clips[clip];
         newClip.Play();
         Destroy(newClip.gameObject, clips[clip].length);
+        if(printNames == true){
+            for (int i = 0; i < clips.Length; i++)
+            {
+                print(i + " = " + clips[i].name);
+            }
+        }
     }
 
     public static void LoadScene(int number)

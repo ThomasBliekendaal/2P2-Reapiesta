@@ -55,16 +55,19 @@ public class Cam : MonoBehaviour
         Invoke("StopShake", time);
     }
 
-    public void SmallShake(){
-        StartShake(0.1f,0.2f);
+    public void SmallShake()
+    {
+        StartShake(0.1f, 0.2f);
     }
 
-    public void MediumShake(){
-        StartShake(0.2f,0.5f);
+    public void MediumShake()
+    {
+        StartShake(0.2f, 0.5f);
     }
 
-    public void HardShake(){
-         StartShake(0.3f,1f);
+    public void HardShake()
+    {
+        StartShake(0.3f, 1f);
     }
 
     void StopShake()
@@ -82,7 +85,11 @@ public class Cam : MonoBehaviour
         helper.position = Vector3.Lerp(helper.position, player.position + transform.TransformDirection(offset), Time.deltaTime * speed);
         //  helper.eulerAngles += new Vector3(Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0) * Time.unscaledDeltaTime * rotSpeed;
         angleGoal += new Vector3(Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0) * Time.unscaledDeltaTime * rotSpeed;
+        angleGoal.x -= 90;
+        angleGoal = new Vector3(-Mathf.Clamp(-angleGoal.x, 40, 140), angleGoal.y, angleGoal.z);
+        angleGoal.x += 90;
         helper.rotation = Quaternion.Lerp(helper.rotation, Quaternion.Euler(angleGoal), Time.unscaledDeltaTime * 20);
+
         transform.position = helper.position + helper.TransformDirection(0, 0, distance);
         transform.LookAt(helper.position);
     }
@@ -103,10 +110,16 @@ public class Cam : MonoBehaviour
     void SkateRotate()
     {
         helper.position = Vector3.Lerp(helper.position, player.position + transform.TransformDirection(offset), Time.deltaTime * speed);
-        helper.rotation = Quaternion.Lerp(helper.rotation, Quaternion.Euler(helper.eulerAngles.x, player.eulerAngles.y + 180, helper.eulerAngles.z), Time.deltaTime * 3);
-        helper.eulerAngles += new Vector3(Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0) * Time.unscaledDeltaTime * rotSpeed;
+        //  helper.eulerAngles += new Vector3(Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0) * Time.unscaledDeltaTime * rotSpeed;
+        angleGoal += new Vector3(Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0) * Time.unscaledDeltaTime * rotSpeed;
+        angleGoal.x -= 90;
+        angleGoal = new Vector3(-Mathf.Clamp(-angleGoal.x, 40, 140), angleGoal.y, angleGoal.z);
+        angleGoal.x += 90;
+        helper.rotation = Quaternion.Lerp(helper.rotation, Quaternion.Euler(angleGoal), Time.unscaledDeltaTime * 20);
+
         transform.position = helper.position + helper.TransformDirection(0, 0, distance);
         transform.LookAt(helper.position);
-        angleGoal = helper.eulerAngles;
+
+        angleGoal.y = Quaternion.Lerp(Quaternion.Euler(angleGoal),Quaternion.Euler(player.localEulerAngles.x,player.eulerAngles.y + 180,angleGoal.z),Time.deltaTime * rotSpeed / 10).eulerAngles.y;
     }
 }

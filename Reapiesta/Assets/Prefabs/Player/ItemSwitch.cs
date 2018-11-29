@@ -65,10 +65,12 @@ public class ItemSwitch : MonoBehaviour
         {
             // special.SetActive(false);
             curItem++;
+            ui.text = transform.GetChild(curItem).name;
         }
         if (curItem == specialDisable && special.curState != ScytheThrow.State.Disabled)
         {
             Scroll();
+            ui.text = transform.GetChild(curItem).name;
         }
     }
 }

@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
                 pf.FinalMove();
                 if (Input.GetButtonDown("Fire2"))
                 {
-                    StaticFunctions.PlayAudio(1);
+                    StaticFunctions.PlayAudio(1,false);
                     pf.curState = PlayerFunctions.State.Foot;
                     transform.eulerAngles = Vector3.zero;
                     Instantiate(pf.particleSkateChange, transform.position, Quaternion.Euler(90, 0, 0), transform);
