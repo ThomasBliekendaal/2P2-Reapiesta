@@ -32,7 +32,7 @@ public static class SaveLoad
 			stream.Close();
 			return data.lives;
         } else {
-			Debug.LogError("File does not exist.");
+			//Debug.LogError("File does not exist.");
 			return 10;
 		}
     }
