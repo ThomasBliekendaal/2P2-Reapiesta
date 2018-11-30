@@ -8,6 +8,7 @@ public class ScytheAttack : MonoBehaviour
     GameObject hitbox;
     Transform player;
 	Cam cam;
+    [SerializeField] float speed = 1000;
 
     void Start()
     {
@@ -38,7 +39,7 @@ public class ScytheAttack : MonoBehaviour
         }
         else
         {
-                hitbox.transform.localRotation = Quaternion.RotateTowards(hitbox.transform.localRotation, Quaternion.Euler(0, 0, 0), Time.deltaTime * 1000);
+                hitbox.transform.localRotation = Quaternion.RotateTowards(hitbox.transform.localRotation, Quaternion.Euler(0, 0, 0), Time.deltaTime * speed);
                 if (hitbox.transform.localRotation == Quaternion.Euler(0, 0, 0))
                 {
                     hitbox.SetActive(false);

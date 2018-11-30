@@ -20,10 +20,13 @@ public class ScytheThrow : MonoBehaviour
     [SerializeField] List<Renderer> rend;
     Cam cam;
     [SerializeField] GameObject hurtbox;
+    Vector3 lastPos;
+    [SerializeField] Vector3 offset = Vector3.zero;
     void Start()
     {
         player = FindObjectOfType<PlayerController>().transform;
         cam = Camera.main.GetComponent<Cam>();
+        lastPos = transform.position;
     }
 
     void Update()
@@ -35,13 +38,12 @@ public class ScytheThrow : MonoBehaviour
                 if (Input.GetButtonDown("Throw") == true)
                 {
                     StartThrow();
-                    rend[0].enabled = true;
-                    rend[1].enabled = true;
                 }
                 break;
             case State.Normal:
                 NormalThrow();
                 RotateScythe();
+                RayCollider();
                 break;
             case State.GoBack:
                 MoveToPlayer();
@@ -49,6 +51,25 @@ public class ScytheThrow : MonoBehaviour
                 RotateScythe();
                 break;
         }
+    }
+
+    void RayCollider()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(lastPos, lastPos - transform.position, out hit, Vector3.Distance(transform.position, lastPos), ~LayerMask.GetMask("IgnoreCam", "Ignore Raycast")))
+        {
+            curState = State.GoBack;
+            StaticFunctions.PlayAudio(9, false);
+            cam.SmallShake();
+        }
+        else if (Physics.Raycast(transform.position, transform.position - lastPos, out hit, Vector3.Distance(transform.position, lastPos), ~LayerMask.GetMask("IgnoreCam", "Ignore Raycast")))
+        {
+            curState = State.GoBack;
+            StaticFunctions.PlayAudio(9, false);
+            cam.SmallShake();
+        }
+        // Debug.DrawRay(lastPos, lastPos - transform.position, Color.red, 1);
+        lastPos = transform.position;
     }
 
     void RotateScythe()
@@ -61,8 +82,10 @@ public class ScytheThrow : MonoBehaviour
 
     void DisabledStuff()
     {
-        rend[0].enabled = false;
-        rend[1].enabled = false;
+        for (int i = 0; i < rend.Count; i++)
+        {
+            rend[i].enabled = false;
+        }
         transform.position = player.position;
         hurtbox.SetActive(false);
     }
@@ -74,11 +97,28 @@ public class ScytheThrow : MonoBehaviour
 
     void StartThrow()
     {
-        goal = player.position + cam.transform.forward * range;
+        lastPos = transform.position;
+        for (int i = 0; i < rend.Count; i++)
+        {
+            rend[i].enabled = true;
+        }
         curState = State.Normal;
         cam.SmallShake();
         hurtbox.SetActive(true);
-        StaticFunctions.PlayAudio(4,false);
+        StaticFunctions.PlayAudio(4, false);
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, cam.transform.forward, out hit, 10, ~LayerMask.GetMask("IgnoreCam", "Ignore Raycast")))
+        {
+            float ySaveCam = cam.transform.eulerAngles.y;
+            cam.transform.eulerAngles = new Vector3(cam.transform.eulerAngles.x, 0, cam.transform.eulerAngles.z);
+            goal = player.position + cam.transform.forward * range + cam.transform.TransformDirection(offset);
+            cam.transform.eulerAngles = new Vector3(cam.transform.eulerAngles.x, ySaveCam, cam.transform.eulerAngles.z);
+            transform.position -= (transform.position - hit.point);
+        }
+        else
+        {
+            goal = player.position + cam.transform.forward * range + cam.transform.TransformDirection(offset);
+        }
     }
 
     void NormalThrow()
@@ -94,7 +134,7 @@ public class ScytheThrow : MonoBehaviour
     {
         if (Vector3.Distance(transform.position, player.position) < 5)
         {
-            StaticFunctions.PlayAudio(1,false);
+            StaticFunctions.PlayAudio(1, false);
             curState = State.Disabled;
             cam.SmallShake();
         }

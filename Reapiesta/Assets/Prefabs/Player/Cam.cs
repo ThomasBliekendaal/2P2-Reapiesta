@@ -23,7 +23,6 @@ public class Cam : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         playerMov = player.GetComponent<PlayerFunctions>();
         lastPos = transform.position;
-
     }
 
     void Update()
@@ -109,7 +108,7 @@ public class Cam : MonoBehaviour
 
     void SkateRotate()
     {
-        helper.position = Vector3.Lerp(helper.position, player.position + transform.TransformDirection(offset), Time.deltaTime * speed);
+        helper.position = Vector3.Lerp(helper.position, player.position + transform.TransformDirection(offset), Time.deltaTime * speed * 2);
         //  helper.eulerAngles += new Vector3(Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0) * Time.unscaledDeltaTime * rotSpeed;
         angleGoal += new Vector3(Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0) * Time.unscaledDeltaTime * rotSpeed;
         angleGoal.x -= 90;
@@ -119,7 +118,12 @@ public class Cam : MonoBehaviour
 
         transform.position = helper.position + helper.TransformDirection(0, 0, distance);
         transform.LookAt(helper.position);
+        if (Mathf.Abs(Mathf.Abs(player.eulerAngles.y) - Mathf.Abs(transform.eulerAngles.y)) > 0)
+        {
+            angleGoal.y = Quaternion.Lerp(Quaternion.Euler(angleGoal), Quaternion.Euler(player.localEulerAngles.x, player.eulerAngles.y + 180, angleGoal.z), Time.deltaTime * rotSpeed / 10).eulerAngles.y;
+        }
+        //the z axis rotation effect
+        transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(transform.localEulerAngles.x, transform.localEulerAngles.y, Input.GetAxis("Horizontal") * -5), Time.deltaTime * 1000);
 
-        angleGoal.y = Quaternion.Lerp(Quaternion.Euler(angleGoal),Quaternion.Euler(player.localEulerAngles.x,player.eulerAngles.y + 180,angleGoal.z),Time.deltaTime * rotSpeed / 10).eulerAngles.y;
     }
 }

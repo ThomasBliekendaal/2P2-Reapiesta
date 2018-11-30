@@ -9,7 +9,12 @@ public class PlayerFunctions : MonoBehaviour
     public CharacterController cc;
     [SerializeField]
     float speed = 10;
+    [SerializeField] float accelerationSpeed = 3;
+    [SerializeField] float decelerationSpeed = 6;
+    public ParticleSystem dustParticles;
     public float jumpHeight = 10;
+    [SerializeField] float gravityStrength = -12;
+    [SerializeField] float fallDeceleration = 50;
 
     [HideInInspector] public Vector3 moveV3;
     float skateSpeed = 40;
@@ -78,7 +83,7 @@ public class PlayerFunctions : MonoBehaviour
             grounded = false;
             if (canSkateJump == true)
             {
-                StaticFunctions.PlayAudio(1,false);
+                StaticFunctions.PlayAudio(1, false);
                 curState = State.SkateBoard;
                 skateSpeed = 50;
                 Instantiate(particleSkateChange, transform.position, Quaternion.Euler(90, 0, 0), transform);
@@ -93,7 +98,7 @@ public class PlayerFunctions : MonoBehaviour
         }
         else
         {
-            StaticFunctions.PlayAudio(1,false);
+            StaticFunctions.PlayAudio(1, false);
             grounded = true;
             curState = State.SkateBoard;
             skateSpeed = 50;
@@ -106,7 +111,7 @@ public class PlayerFunctions : MonoBehaviour
     {
         if (canDash == true)
         {
-            StaticFunctions.PlayAudio(13,false);
+            StaticFunctions.PlayAudio(13, false);
             stateBeforeDash = curState;
             curState = State.Dash;
             cam.MediumShake();
@@ -241,12 +246,12 @@ public class PlayerFunctions : MonoBehaviour
                 {
                     Instantiate(landingParticle, transform.position, transform.rotation, transform);
                     cam.HardShake();
-                    StaticFunctions.PlayAudio(2,false);
+                    StaticFunctions.PlayAudio(2, false);
                 }
                 else
                 {
                     cam.SmallShake();
-                    StaticFunctions.PlayAudio(11,false);
+                    StaticFunctions.PlayAudio(11, false);
                 }
                 skateSpeed /= 1.1f;
                 transform.position = hit.point + new Vector3(0, 0.01f, 0);
@@ -297,11 +302,11 @@ public class PlayerFunctions : MonoBehaviour
         }
         if (moveV3.y < 0)
         {
-            moveV3.y = Mathf.MoveTowards(moveV3.y, -120f, Time.deltaTime * 500);
+            moveV3.y = Mathf.MoveTowards(moveV3.y, gravityStrength, Time.deltaTime * fallDeceleration * 2);
         }
         else
         {
-            moveV3.y = Mathf.MoveTowards(moveV3.y, -120f, Time.deltaTime * 250);
+            moveV3.y = Mathf.MoveTowards(moveV3.y, gravityStrength, Time.deltaTime * fallDeceleration);
         }
 
         if (Input.GetButtonDown("Jump") && cc.isGrounded == true)
@@ -325,8 +330,16 @@ public class PlayerFunctions : MonoBehaviour
     {
         Vector3 goal;
         goal = transform.TransformDirection(0, 0, Mathf.Min(1, Vector2.SqrMagnitude(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"))))) * speed;
-        moveV3.x = Mathf.Lerp(moveV3.x, goal.x, Time.deltaTime * 6);
-        moveV3.z = Mathf.Lerp(moveV3.z, goal.z, Time.deltaTime * 6);
+        if (Vector2.SqrMagnitude(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"))) != 0)
+        {
+            moveV3.x = Mathf.Lerp(moveV3.x, goal.x, Time.deltaTime * accelerationSpeed);
+            moveV3.z = Mathf.Lerp(moveV3.z, goal.z, Time.deltaTime * accelerationSpeed);
+        }
+        else
+        {
+            moveV3.x = Mathf.Lerp(moveV3.x, goal.x, Time.deltaTime * decelerationSpeed);
+            moveV3.z = Mathf.Lerp(moveV3.z, goal.z, Time.deltaTime * decelerationSpeed);
+        }
     }
 
     public void FinalMove()

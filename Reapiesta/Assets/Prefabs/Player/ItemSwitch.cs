@@ -42,10 +42,15 @@ public class ItemSwitch : MonoBehaviour
     {
         if (Input.mouseScrollDelta.y != 0)
         {
+            int lastItem = curItem;
             curItem += (int)Input.mouseScrollDelta.y;
             // if(Input.anyKeyDown == true){
             curItem += (int)Input.GetAxis("ScrollItem");
             //  }
+            if (curItem != lastItem)
+            {
+                StaticFunctions.PlayAudio(0, false);
+            }
             if (curItem > transform.childCount - 1)
             {
                 curItem = 0;

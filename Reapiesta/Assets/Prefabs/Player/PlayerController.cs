@@ -36,16 +36,27 @@ public class PlayerController : MonoBehaviour
                 {
                     pf.StartDash();
                 }
+                if (pf.cc.isGrounded == true)
+                {
+                    if(pf.dustParticles.isStopped == true){
+                    pf.dustParticles.Play();
+                    }
+                }
+                else
+                {
+                     pf.dustParticles.Stop();
+                }
                 break;
             case PlayerFunctions.State.SkateBoard:
                 pf.skateBoard.SetActive(true);
+                pf.dustParticles.Stop();
                 pf.SkateForward();
                 pf.SkateAngleY();
                 // Gravity();
                 pf.FinalMove();
                 if (Input.GetButtonDown("Fire2"))
                 {
-                    StaticFunctions.PlayAudio(1,false);
+                    StaticFunctions.PlayAudio(1, false);
                     pf.curState = PlayerFunctions.State.Foot;
                     transform.eulerAngles = Vector3.zero;
                     Instantiate(pf.particleSkateChange, transform.position, Quaternion.Euler(90, 0, 0), transform);
@@ -63,12 +74,13 @@ public class PlayerController : MonoBehaviour
                 }
                 break;
             case PlayerFunctions.State.Dash:
+                pf.dustParticles.Stop();
                 pf.DashStuff();
                 pf.FinalMove();
                 break;
         }
         pf.staminaBar.curPercent = pf.stamina;
-        pf.stamina = Mathf.MoveTowards(pf.stamina,100,Time.deltaTime * 10);
+        pf.stamina = Mathf.MoveTowards(pf.stamina, 100, Time.deltaTime * 10);
     }
 
 
