@@ -45,6 +45,7 @@ public class PlayerHitbox : Hitbox
     {
         SaveData save = FindObjectOfType<SaveData>();
         Time.timeScale = 0;
+        StaticFunctions.paused = true;
         yield return new WaitForSecondsRealtime(1.9f);
         deathUI.SetActive(true);
         StaticFunctions.PlayAudio(13,false);
@@ -55,6 +56,7 @@ public class PlayerHitbox : Hitbox
         SaveLoad.SaveManager(save);
         yield return new WaitForSecondsRealtime(1f);
         Time.timeScale = 1;
+        StaticFunctions.paused = false;
         StaticFunctions.LoadScene(true);
     }
 
@@ -62,6 +64,7 @@ public class PlayerHitbox : Hitbox
     {
         SaveData save = FindObjectOfType<SaveData>();
         Time.timeScale = 0;
+        StaticFunctions.paused = true;
         yield return new WaitForSecondsRealtime(1.3f);
         gameOverUI.SetActive(true);
         StaticFunctions.PlayAudio(13,false);
@@ -69,6 +72,7 @@ public class PlayerHitbox : Hitbox
         SaveLoad.SaveManager(save);
         yield return new WaitForSecondsRealtime(5f);
         Time.timeScale = 1;
+        StaticFunctions.paused = false;
         StaticFunctions.PlayAudio(13,false);
         StaticFunctions.LoadScene(true);
     }

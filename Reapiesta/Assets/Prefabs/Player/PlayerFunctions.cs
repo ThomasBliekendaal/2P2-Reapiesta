@@ -271,14 +271,11 @@ public class PlayerFunctions : MonoBehaviour
             SkateGravity();
         }
 
-        if (justSkateGrounded == true)
+        if (justSkateGrounded == true && Input.GetButtonDown("Jump") == true && Physics.Raycast(transform.position, Vector3.up, 4) == false)
         {
-            if (Input.GetButtonDown("Jump"))
-            {
-                justSkateGrounded = true;
-                moveV3 = transform.TransformDirection(0, skateJumpHeight, 0) + moveV3;
-                transform.position += new Vector3(0, 4.1f, 0);
-            }
+            justSkateGrounded = true;
+            moveV3 = transform.TransformDirection(0, skateJumpHeight, 0) + moveV3;
+            transform.position += new Vector3(0, 4.1f, 0);
         }
 
     }
@@ -321,9 +318,16 @@ public class PlayerFunctions : MonoBehaviour
         if (Vector2.SqrMagnitude(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"))) != 0)
         {
             goal = Mathf.Atan2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) * Mathf.Rad2Deg;
-            goal += Camera.main.transform.eulerAngles.y;
+            goal += cam.transform.eulerAngles.y;
         }
-        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(transform.eulerAngles.x, goal, transform.eulerAngles.z), Time.deltaTime * 20);
+        if (cc.isGrounded == true)
+        {
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(transform.eulerAngles.x, goal, transform.eulerAngles.z), Time.deltaTime * 20);
+        }
+        else
+        {
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(transform.eulerAngles.x, goal, transform.eulerAngles.z), Time.deltaTime * 5);
+        }
     }
 
     public void MoveForward()
@@ -339,6 +343,27 @@ public class PlayerFunctions : MonoBehaviour
         {
             moveV3.x = Mathf.Lerp(moveV3.x, goal.x, Time.deltaTime * decelerationSpeed);
             moveV3.z = Mathf.Lerp(moveV3.z, goal.z, Time.deltaTime * decelerationSpeed);
+            if (cc.isGrounded == true && Physics.Raycast(transform.position, Vector3.down, 4, ~LayerMask.GetMask("Ignore Raycast")) == false)
+            {//this makes him stop at a ledge when decelerating
+                moveV3.x = 0;
+                moveV3.z = 0;
+            }
+        }
+
+        //this just feels better, don't question it. It stops you when the angle difference it bigger then 100
+        if (cc.isGrounded == true)
+        {
+            float newGoal = transform.eulerAngles.y;
+            if (Vector2.SqrMagnitude(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"))) != 0)
+            {
+                newGoal = Mathf.Atan2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) * Mathf.Rad2Deg;
+                newGoal += cam.transform.eulerAngles.y;
+            }
+            if (Quaternion.Angle(transform.rotation, Quaternion.Euler(transform.eulerAngles.x, newGoal, transform.eulerAngles.z)) > 100)
+            {
+                moveV3.x = 0;
+                moveV3.z = 0;
+            }
         }
     }
 

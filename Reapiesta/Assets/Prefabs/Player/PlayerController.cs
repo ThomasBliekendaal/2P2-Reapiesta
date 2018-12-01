@@ -58,7 +58,7 @@ public class PlayerController : MonoBehaviour
                 {
                     StaticFunctions.PlayAudio(1, false);
                     pf.curState = PlayerFunctions.State.Foot;
-                    transform.eulerAngles = Vector3.zero;
+                    transform.eulerAngles = new Vector3(0,Mathf.Atan2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y,0);
                     Instantiate(pf.particleSkateChange, transform.position, Quaternion.Euler(90, 0, 0), transform);
                     pf.cam.MediumShake();
 

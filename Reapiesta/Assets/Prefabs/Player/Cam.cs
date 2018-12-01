@@ -17,6 +17,7 @@ public class Cam : MonoBehaviour
     bool isShaking = false;
     Vector3 lastPos;
     float shakestr = 0.5f;
+    float zRotHelp = 0;
 
     void Start()
     {
@@ -81,7 +82,14 @@ public class Cam : MonoBehaviour
 
     void NormalCam()
     {
-        helper.position = Vector3.Lerp(helper.position, player.position + transform.TransformDirection(offset), Time.deltaTime * speed);
+        if (playerMov.curState != PlayerFunctions.State.Dash)
+        {
+            helper.position = Vector3.Lerp(helper.position, player.position + transform.TransformDirection(offset), Time.deltaTime * speed);
+        }
+        else
+        {
+            helper.position = Vector3.Lerp(helper.position, player.position + transform.TransformDirection(offset), Time.deltaTime * speed / 2);
+        }
         //  helper.eulerAngles += new Vector3(Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0) * Time.unscaledDeltaTime * rotSpeed;
         angleGoal += new Vector3(Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0) * Time.unscaledDeltaTime * rotSpeed;
         angleGoal.x -= 90;
@@ -118,12 +126,15 @@ public class Cam : MonoBehaviour
 
         transform.position = helper.position + helper.TransformDirection(0, 0, distance);
         transform.LookAt(helper.position);
+
+        //z axis rotation, can't Lerp it.
+        zRotHelp = Mathf.Lerp(zRotHelp, Input.GetAxis("Horizontal") * -10,Time.deltaTime * 5);
+        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, zRotHelp);
+
         if (Mathf.Abs(Mathf.Abs(player.eulerAngles.y) - Mathf.Abs(transform.eulerAngles.y)) > 0)
         {
             angleGoal.y = Quaternion.Lerp(Quaternion.Euler(angleGoal), Quaternion.Euler(player.localEulerAngles.x, player.eulerAngles.y + 180, angleGoal.z), Time.deltaTime * rotSpeed / 10).eulerAngles.y;
         }
-        //the z axis rotation effect
-        transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(transform.localEulerAngles.x, transform.localEulerAngles.y, Input.GetAxis("Horizontal") * -5), Time.deltaTime * 1000);
 
     }
 }

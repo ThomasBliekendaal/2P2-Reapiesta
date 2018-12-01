@@ -35,30 +35,42 @@ public class Shoot : MonoBehaviour
         }
         if (Input.GetButtonUp("Attack"))
         {
-            Time.timeScale = 1;
-            if (canSlowMo == true)
+            if (StaticFunctions.paused == false)
             {
-                ShootNow();
-                canSlowMo = false;
+                Time.timeScale = 1;
+                if (canSlowMo == true)
+                {
+                    ShootNow();
+                    canSlowMo = false;
+                }
             }
         }
         if (Input.GetAxis("Attack") == 0)
         {
             //cam.fieldOfView = Mathf.MoveTowards(cam.fieldOfView, 60, Time.deltaTime * 150);
-            Time.timeScale = 1;
+            if (StaticFunctions.paused == false && Time.timeScale == slowMotionSpeed)
+            {
+                Time.timeScale = 1;
+            }
         }
         else
         {
             if (plyr.pf.cc.isGrounded == false && plyr.pf.curState != PlayerFunctions.State.SkateBoard && plyr.pf.stamina > 10 && canSlowMo == true)
             {
-                Time.timeScale = slowMotionSpeed;
+                if (StaticFunctions.paused == false)
+                {
+                    Time.timeScale = slowMotionSpeed;
+                    plyr.pf.stamina -= Time.unscaledDeltaTime * 50;
+                }
                 // cam.fieldOfView = 40;
-                plyr.pf.stamina -= Time.unscaledDeltaTime * 50;
             }
             else if (plyr.pf.curState == PlayerFunctions.State.SkateBoard && plyr.pf.grounded == false && plyr.pf.cc.isGrounded == false && canSlowMo == true && plyr.pf.stamina > 10)
             {
-                Time.timeScale = slowMotionSpeed;
-                plyr.pf.stamina -= Time.unscaledDeltaTime * 50;
+                if (StaticFunctions.paused == false)
+                {
+                    Time.timeScale = slowMotionSpeed;
+                    plyr.pf.stamina -= Time.unscaledDeltaTime * 50;
+                }
             }
             else
             {
@@ -66,7 +78,10 @@ public class Shoot : MonoBehaviour
                 {
                     canSlowMo = false;
                 }
-                Time.timeScale = 1;
+                if (StaticFunctions.paused == false)
+                {
+                    Time.timeScale = 1;
+                }
             }
         }
 

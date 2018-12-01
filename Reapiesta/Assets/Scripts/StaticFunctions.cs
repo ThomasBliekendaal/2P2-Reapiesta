@@ -8,6 +8,7 @@ public class StaticFunctions : MonoBehaviour
 
     public static GameObject audioPrefab;
     public static AudioClip[] clips;
+    public static bool paused = false;
 
 
     public static void PlayAudio(int clip,bool printNames)

@@ -109,11 +109,12 @@ public class ScytheThrow : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(transform.position, cam.transform.forward, out hit, 10, ~LayerMask.GetMask("IgnoreCam", "Ignore Raycast")))
         {
-            float ySaveCam = cam.transform.eulerAngles.y;
-            cam.transform.eulerAngles = new Vector3(cam.transform.eulerAngles.x, 0, cam.transform.eulerAngles.z);
+            float ySaveCam = cam.transform.eulerAngles.x;
+            cam.transform.eulerAngles = new Vector3(0,cam.transform.eulerAngles.y, cam.transform.eulerAngles.z);
             goal = player.position + cam.transform.forward * range + cam.transform.TransformDirection(offset);
             cam.transform.eulerAngles = new Vector3(cam.transform.eulerAngles.x, ySaveCam, cam.transform.eulerAngles.z);
-            transform.position -= (transform.position - hit.point);
+            //transform.position += (transform.position - hit.point);
+            //Debug.Log("nani?");
         }
         else
         {

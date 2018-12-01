@@ -38,9 +38,12 @@ public class Hitbox : MonoBehaviour
         else if (hitShake == true)
         {
             cam.SmallShake();
-            StaticFunctions.PlayAudio(8,false);
+            StaticFunctions.PlayAudio(8, false);
             //Debug.Log("hi");
-            Time.timeScale = stopTime;
+            if (StaticFunctions.paused == false)
+            {
+                Time.timeScale = stopTime;
+            }
             StartCoroutine(SetTimeBack(stopTime * 10));
             if (hitParticle != null)
             {
@@ -57,13 +60,17 @@ public class Hitbox : MonoBehaviour
     IEnumerator SetTimeBack(float time)
     {
         yield return new WaitForSecondsRealtime(time);
-        Time.timeScale = 1f;
+        if (StaticFunctions.paused == false)
+        {
+            Time.timeScale = 1f;
+        }
+        Debug.Log(StaticFunctions.paused);
     }
 
     public virtual void Die()
     {
         Destroy(gameObject);
-        StaticFunctions.PlayAudio(2,false);
+        StaticFunctions.PlayAudio(2, false);
         //Debug.Log(name + " died");
         if (dieShake == true)
         {
