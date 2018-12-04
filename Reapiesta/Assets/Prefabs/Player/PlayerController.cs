@@ -6,6 +6,10 @@ public class PlayerController : MonoBehaviour
 {
 
     [HideInInspector] public PlayerFunctions pf;
+    [SerializeField] ItemSwitch itemSwitch;
+    [SerializeField] Shoot shoot;
+    [SerializeField] ScytheThrow scytheThrow;
+    [SerializeField] ScytheAttack scytheAttack;
 
     void Start()
     {

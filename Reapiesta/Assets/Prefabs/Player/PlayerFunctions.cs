@@ -85,12 +85,12 @@ public class PlayerFunctions : MonoBehaviour
             {
                 StaticFunctions.PlayAudio(1, false);
                 curState = State.SkateBoard;
-                skateSpeed = 50;
+                skateSpeed = 25;
                 Instantiate(particleSkateChange, transform.position, Quaternion.Euler(90, 0, 0), transform);
                 moveV3 = new Vector3(0, jumpHeight, 0);
-                skateSpeed += 50;
+                skateSpeed += 25;
                 moveV3 += transform.TransformDirection(0, 0, minSkateSpeed / 5);
-                transform.position += new Vector3(0, 4.1f, 0);
+                transform.position += new Vector3(0, 2.1f, 0);
                 transform.Rotate(0, 0, 180);
                 canSkateJump = false;
                 cam.MediumShake();
@@ -143,7 +143,7 @@ public class PlayerFunctions : MonoBehaviour
             {
                 skateSpeed = minSkateSpeed / 2;
             }
-            if (Physics.Raycast(transform.position, Vector3.down, 4) == false)
+            if (Physics.Raycast(transform.position, Vector3.down, 2) == false)
             {
                 canDash = false;
                 moveV3 = new Vector3(moveV3.x, jumpHeight, moveV3.z);
@@ -164,11 +164,11 @@ public class PlayerFunctions : MonoBehaviour
         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, transform.localEulerAngles.y, 0), Time.deltaTime * 3);
         if (moveV3.y > 0)
         {
-            moveV3.y = Mathf.MoveTowards(moveV3.y, -1200, Time.deltaTime * 100);
+            moveV3.y = Mathf.MoveTowards(moveV3.y, -687, Time.deltaTime * 67);
         }
         else
         {
-            moveV3.y = Mathf.MoveTowards(moveV3.y, -1200, Time.deltaTime * 200);
+            moveV3.y = Mathf.MoveTowards(moveV3.y, -687, Time.deltaTime * 124);
         }
         justSkateGrounded = false;
 
@@ -179,7 +179,7 @@ public class PlayerFunctions : MonoBehaviour
         grounded = false;
         RaycastHit hit;
         float input = Vector2.SqrMagnitude(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")));
-        if (Physics.Raycast(transform.position, -Vector3.up, out hit, 4))
+        if (Physics.Raycast(transform.position, -Vector3.up, out hit, 2))
         {
             grounded = true;
             //sets the rotation
@@ -254,7 +254,7 @@ public class PlayerFunctions : MonoBehaviour
                     StaticFunctions.PlayAudio(11, false);
                 }
                 skateSpeed /= 1.1f;
-                transform.position = hit.point + new Vector3(0, 0.01f, 0);
+                transform.position = hit.point + new Vector3(0, 1, 0);
                 moveV3 = Vector3.zero;
                 transform.rotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
                 canDash = true;
@@ -271,11 +271,12 @@ public class PlayerFunctions : MonoBehaviour
             SkateGravity();
         }
 
-        if (justSkateGrounded == true && Input.GetButtonDown("Jump") == true && Physics.Raycast(transform.position, Vector3.up, 4) == false)
+        if (justSkateGrounded == true && Input.GetButtonDown("Jump") == true && Physics.Raycast(transform.position, Vector3.up, 2) == false)
         {
             justSkateGrounded = true;
-            moveV3 = transform.TransformDirection(0, skateJumpHeight, 0) + moveV3;
-            transform.position += new Vector3(0, 4.1f, 0);
+            moveV3 += transform.TransformDirection(0,jumpHeight,0);
+            moveV3.y = skateJumpHeight;
+            transform.position += new Vector3(0, 2.1f, 0);
         }
 
     }
@@ -343,7 +344,7 @@ public class PlayerFunctions : MonoBehaviour
         {
             moveV3.x = Mathf.Lerp(moveV3.x, goal.x, Time.deltaTime * decelerationSpeed);
             moveV3.z = Mathf.Lerp(moveV3.z, goal.z, Time.deltaTime * decelerationSpeed);
-            if (cc.isGrounded == true && Physics.Raycast(transform.position, Vector3.down, 4, ~LayerMask.GetMask("Ignore Raycast")) == false)
+            if (cc.isGrounded == true && Physics.Raycast(transform.position, Vector3.down, 2, ~LayerMask.GetMask("Ignore Raycast")) == false)
             {//this makes him stop at a ledge when decelerating
                 moveV3.x = 0;
                 moveV3.z = 0;

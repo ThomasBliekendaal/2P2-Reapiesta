@@ -11,7 +11,7 @@ public Vector3 scaleV3 = Vector3.zero;
 public float speed = 1;
 
 	void Start () {
-		
+
 	}
 	
 	void Update () {

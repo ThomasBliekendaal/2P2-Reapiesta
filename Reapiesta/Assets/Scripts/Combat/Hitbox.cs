@@ -64,7 +64,7 @@ public class Hitbox : MonoBehaviour
         {
             Time.timeScale = 1f;
         }
-        Debug.Log(StaticFunctions.paused);
+       // Debug.Log(StaticFunctions.paused);
     }
 
     public virtual void Die()
