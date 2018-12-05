@@ -33,33 +33,23 @@ public class PlayerFunctions : MonoBehaviour
     Transform skateAngleHelper;
     [HideInInspector] public Cam cam;
     [Header("Skateboard Stats")]
-    [SerializeField]
-    float maxSkateSpeed;
-    [SerializeField]
-    float skateAcceleration;
-    [SerializeField]
-    float skateDeceleration;
-    [SerializeField]
-    float minSkateSpeed = 10;
-    [SerializeField]
-    float skateAngleSetSpeed = 10;
+    [SerializeField] float maxSkateSpeed;
+    [SerializeField] float skateAcceleration;
+    [SerializeField] float skateDeceleration;
+    [SerializeField] float minSkateSpeed = 10;
+    [SerializeField] float skateAngleSetSpeed = 10;
     bool justSkateGrounded = false;
-    [SerializeField]
-    float skateJumpHeight = 50;
-    [HideInInspector]
-    public bool grounded = false;
+    [SerializeField] float skateJumpHeight = 50;
+    [HideInInspector] public bool grounded = false;
     public GameObject particleSkateChange;
     [HideInInspector] public bool canSkateJump = true;
     State stateBeforeDash = State.Foot;
     [Header("Dashing")]
-    [SerializeField]
-    float dashSpeed = 10;
-    [SerializeField]
-    Renderer[] dashInvisible;
-    [SerializeField]
-    GameObject particleDash;
-    [SerializeField]
-    GameObject landingParticle;
+    [SerializeField] GameObject[] dashEffects; 
+    [SerializeField] float dashSpeed = 10;
+    [SerializeField] Renderer[] dashInvisible;
+    [SerializeField] GameObject particleDash;
+    [SerializeField] GameObject landingParticle;
     bool canDash = true;
     [HideInInspector] public float stamina = 100;
     public UIPercentBar staminaBar;
@@ -119,7 +109,7 @@ public class PlayerFunctions : MonoBehaviour
             {
                 dashInvisible[i].enabled = false;
             }
-            Instantiate(particleDash, transform.position, Quaternion.identity, transform);
+            Instantiate(particleDash, transform.position, Quaternion.identity);
             transform.eulerAngles = new Vector3(0, Mathf.Atan2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y, 0);
             moveV3 = transform.TransformDirection(0, 0, dashSpeed);
             if (grounded == false)
@@ -134,6 +124,7 @@ public class PlayerFunctions : MonoBehaviour
         moveV3 = Vector3.MoveTowards(moveV3, Vector3.zero, Time.deltaTime * dashSpeed);
         if (Vector3.Distance(moveV3, Vector3.zero) < dashSpeed / 4 * 3)
         {
+            Instantiate(particleDash, transform.position, Quaternion.identity);
             for (int i = 0; i < dashInvisible.Length; i++)
             {
                 dashInvisible[i].enabled = true;
@@ -141,7 +132,7 @@ public class PlayerFunctions : MonoBehaviour
             curState = stateBeforeDash;
             if (stateBeforeDash == State.SkateBoard)
             {
-                skateSpeed = minSkateSpeed / 2;
+                skateSpeed = minSkateSpeed / 1.5f;
             }
             if (Physics.Raycast(transform.position, Vector3.down, 2) == false)
             {
@@ -240,26 +231,7 @@ public class PlayerFunctions : MonoBehaviour
             }
 
             //landing
-            if (justSkateGrounded == false)
-            {
-                if (moveV3.y > 40)
-                {
-                    Instantiate(landingParticle, transform.position, transform.rotation, transform);
-                    cam.HardShake();
-                    StaticFunctions.PlayAudio(2, false);
-                }
-                else
-                {
-                    cam.SmallShake();
-                    StaticFunctions.PlayAudio(11, false);
-                }
-                skateSpeed /= 1.1f;
-                transform.position = hit.point + new Vector3(0, 1, 0);
-                moveV3 = Vector3.zero;
-                transform.rotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
-                canDash = true;
-                canSkateJump = true;
-            }
+            SkateLand(hit);
             justSkateGrounded = true;
 
             //minimum speed
@@ -274,11 +246,65 @@ public class PlayerFunctions : MonoBehaviour
         if (justSkateGrounded == true && Input.GetButtonDown("Jump") == true && Physics.Raycast(transform.position, Vector3.up, 2) == false)
         {
             justSkateGrounded = true;
-            moveV3 += transform.TransformDirection(0,jumpHeight,0);
+            moveV3 += transform.TransformDirection(0, jumpHeight, 0);
             moveV3.y = skateJumpHeight;
             transform.position += new Vector3(0, 2.1f, 0);
         }
 
+    }
+
+    void SkateLand(RaycastHit hit)
+    {
+        if (justSkateGrounded == false)
+        {
+            if (moveV3.y > 40)
+            {
+                Instantiate(landingParticle, transform.position, transform.rotation, transform);
+                cam.HardShake();
+                StaticFunctions.PlayAudio(2, false);
+            }
+            else
+            {
+                cam.SmallShake();
+                StaticFunctions.PlayAudio(1, false);
+            }
+            skateSpeed /= 1.1f;
+            transform.position = hit.point + new Vector3(0, 0.1f, 0);
+            transform.rotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
+            canDash = true;
+            canSkateJump = true;
+            cc.Move(transform.TransformDirection(0, -1000 * Time.deltaTime, 0));
+            moveV3.y = -1000 * Time.deltaTime;
+        }
+    }
+
+    public void SkateBoost(bool shake)
+    {
+        skateSpeed = minSkateSpeed / 1.4f;
+        if (shake == true)
+        {
+            cam.SmallShake();
+        }
+        for (int i = 0; i < dashEffects.Length; i++)
+        {
+            dashEffects[i].SetActive(true);
+        }
+    }
+
+    public void StopSkateBoost(){
+         for (int i = 0; i < dashEffects.Length; i++)
+        {
+            dashEffects[i].SetActive(false);
+        }
+        skateSpeed = minSkateSpeed / 3;
+    }
+
+    void SetTimeBack()
+    {
+        if (StaticFunctions.paused == false)
+        {
+            Time.timeScale = 1;
+        }
     }
 
     public void SkateAngleY()

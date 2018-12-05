@@ -1,16 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.PostProcessing;
 
 public class PlayerHitbox : Hitbox
 {
     [SerializeField] GameObject deathUI;
     [SerializeField] GameObject gameOverUI;
     [SerializeField] uint livesAfterDeath = 10;
+    PostProcessingBehaviour pp;
 
     void Start()
     {
         StartStuff();
+        pp = Camera.main.GetComponent<PostProcessingBehaviour>();
     }
 
     public override void Die()
@@ -43,6 +46,7 @@ public class PlayerHitbox : Hitbox
 
     IEnumerator DeathEvents()
     {
+         pp.profile.colorGrading.enabled = true;
         SaveData save = FindObjectOfType<SaveData>();
         Time.timeScale = 0;
         StaticFunctions.paused = true;
@@ -58,10 +62,12 @@ public class PlayerHitbox : Hitbox
         Time.timeScale = 1;
         StaticFunctions.paused = false;
         StaticFunctions.LoadScene(true);
+        pp.profile.colorGrading.enabled = false;
     }
 
     IEnumerator GameOverEvents()
     {
+        pp.profile.colorGrading.enabled = true;
         SaveData save = FindObjectOfType<SaveData>();
         Time.timeScale = 0;
         StaticFunctions.paused = true;
@@ -75,6 +81,7 @@ public class PlayerHitbox : Hitbox
         StaticFunctions.paused = false;
         StaticFunctions.PlayAudio(13,false);
         StaticFunctions.LoadScene(true);
+        pp.profile.colorGrading.enabled = false;
     }
 
 

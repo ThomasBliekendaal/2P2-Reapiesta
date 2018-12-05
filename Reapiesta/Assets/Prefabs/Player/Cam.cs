@@ -18,6 +18,7 @@ public class Cam : MonoBehaviour
     Vector3 lastPos;
     float shakestr = 0.5f;
     float zRotHelp = 0;
+    bool dashFollowWait = false;
 
     void Start()
     {
@@ -57,7 +58,7 @@ public class Cam : MonoBehaviour
 
     public void SmallShake()
     {
-        StartShake(0.1f, 0.2f);
+        StartShake(0.1f, 0.1f);
     }
 
     public void MediumShake()
@@ -84,11 +85,19 @@ public class Cam : MonoBehaviour
     {
         if (playerMov.curState != PlayerFunctions.State.Dash)
         {
-            helper.position = Vector3.Lerp(helper.position, player.position + transform.TransformDirection(offset), Time.deltaTime * speed);
+            if (dashFollowWait == false)
+            {
+                helper.position = Vector3.Lerp(helper.position, player.position + transform.TransformDirection(offset), Time.deltaTime * speed);
+            }
+            else if (IsInvoking("SetDashFollowWait") == false)
+            {
+                Invoke("SetDashFollowWait", 0.1f);
+            }
         }
         else
         {
-            helper.position = Vector3.Lerp(helper.position, player.position + transform.TransformDirection(offset), Time.deltaTime * speed / 2);
+            dashFollowWait = true;
+            // helper.position = Vector3.Lerp(helper.position, player.position + transform.TransformDirection(offset), Time.deltaTime * speed / 2);
         }
         //  helper.eulerAngles += new Vector3(Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0) * Time.unscaledDeltaTime * rotSpeed;
         angleGoal += new Vector3(Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0) * Time.unscaledDeltaTime * rotSpeed;
@@ -99,6 +108,12 @@ public class Cam : MonoBehaviour
 
         transform.position = helper.position + helper.TransformDirection(0, 0, distance);
         transform.LookAt(helper.position);
+    }
+
+    void SetDashFollowWait()
+    {
+        dashFollowWait = false;
+        MediumShake();
     }
 
     void Zooming()
@@ -128,10 +143,10 @@ public class Cam : MonoBehaviour
         transform.LookAt(helper.position);
 
         //z axis rotation, can't Lerp it.
-        zRotHelp = Mathf.Lerp(zRotHelp, Input.GetAxis("Horizontal") * -10,Time.deltaTime * 5);
+        zRotHelp = Mathf.Lerp(zRotHelp, Input.GetAxis("Horizontal") * -10, Time.deltaTime * 5);
         transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, zRotHelp);
 
-        if (Mathf.Abs(Mathf.Abs(player.eulerAngles.y) - Mathf.Abs(transform.eulerAngles.y)) > 0)
+        if (Input.GetAxis("Horizontal") != 0 && Input.GetAxis("Mouse X") == 0)
         {
             angleGoal.y = Quaternion.Lerp(Quaternion.Euler(angleGoal), Quaternion.Euler(player.localEulerAngles.x, player.eulerAngles.y + 180, angleGoal.z), Time.deltaTime * rotSpeed / 10).eulerAngles.y;
         }
