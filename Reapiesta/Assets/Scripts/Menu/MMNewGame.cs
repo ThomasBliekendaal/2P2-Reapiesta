@@ -2,9 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MMNewGame : MenuButton
 {
+
+    [SerializeField] GameObject loadingObj;
+    [SerializeField] Text loadingText;
+    [SerializeField] GameObject loadingCircle;
 
     void Start()
     {
@@ -19,12 +24,11 @@ public class MMNewGame : MenuButton
     public override void ClickEvent()
     {
         Invoke("EventStuff", 1);
-        Debug.Log("eh, yeah?");
+        loadingObj.SetActive(true);
     }
 
     void EventStuff()
     {
-        //  StaticFunctions.LoadScene(0);
         StartCoroutine(SceneLoader());
 
     }
@@ -35,7 +39,6 @@ public class MMNewGame : MenuButton
         AsyncOperation async = SceneManager.LoadSceneAsync(0);
         while (!async.isDone)
         {
-            Debug.Log(async.progress);
             if (Input.GetButtonDown("Attack") == true)
             {
                 async.allowSceneActivation = true;
@@ -43,6 +46,11 @@ public class MMNewGame : MenuButton
             else
             {
                 async.allowSceneActivation = false;
+                if (loadingCircle.activeSelf == true)
+                {
+                    loadingText.text = "Press to continue.";
+                    loadingCircle.SetActive(false);
+                }
             }
             yield return null;
         }

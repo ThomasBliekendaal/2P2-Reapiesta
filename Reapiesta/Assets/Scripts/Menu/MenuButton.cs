@@ -13,10 +13,11 @@ public class MenuButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     [SerializeField] Image img;
     void Start()
     {
-		StartStuff(); 
+        StartStuff();
     }
 
-	public void StartStuff(){
+    public void StartStuff()
+    {
         if (GetComponent<Text>() != null)
         {
             txt = GetComponent<Text>();
@@ -25,7 +26,7 @@ public class MenuButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         {
             img = GetComponent<Image>();
         }
-	}
+    }
 
     void Update()
     {
@@ -37,6 +38,10 @@ public class MenuButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         if (isOver == true && Input.GetButtonDown(button) == true)
         {
             ClickEvent();
+        }
+        if (Input.GetButtonDown(button) == true)
+        {
+            isOver = false;
         }
         else if (isOver == true)
         {

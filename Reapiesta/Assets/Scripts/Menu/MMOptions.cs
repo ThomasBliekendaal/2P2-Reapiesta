@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class MMOptions : MenuButton {
 
+    [SerializeField] int newState = 1;
+
 	void Start()
     {
         StartStuff();
@@ -17,11 +19,11 @@ public class MMOptions : MenuButton {
     public override void ClickEvent()
     {
         Invoke("EventStuff",1);
-		Debug.Log("eh, yeah?");
+		FindObjectOfType<MenuManager>().curState = newState;
     }
 
     void EventStuff()
     {
-        StaticFunctions.LoadScene(0);
+       // StaticFunctions.LoadScene(0);
     }
 }

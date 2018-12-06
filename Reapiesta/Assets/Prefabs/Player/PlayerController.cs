@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     {
         pf = GetComponent<PlayerFunctions>();
         pp = Camera.main.GetComponent<PostProcessingBehaviour>();
+        pf.StopSkateBoost();
     }
     void Update()
     {
@@ -44,7 +45,10 @@ public class PlayerController : MonoBehaviour
                 }
                 if (Input.GetButtonDown("Dash"))
                 {
-                    pf.StartDash();
+                    if (FindObjectOfType<Cam>().IsInvoking("SetDashFollowWait") == false)
+                    {
+                        pf.StartDash();
+                    }
                     // pp.profile.motionBlur.enabled = true;
                     // Camera.main.fieldOfView = 40;
                     //here

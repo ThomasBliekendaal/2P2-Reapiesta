@@ -17,11 +17,10 @@ public class MMQuitGame : MenuButton {
     public override void ClickEvent()
     {
         Invoke("EventStuff",1);
-		Debug.Log("eh, yeah?");
     }
 
     void EventStuff()
     {
-        StaticFunctions.LoadScene(0);
+       Application.Quit();
     }
 }
