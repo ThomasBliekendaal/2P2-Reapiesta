@@ -172,6 +172,7 @@ public class PlayerFunctions : MonoBehaviour
         float input = Vector2.SqrMagnitude(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")));
         if (Physics.Raycast(transform.position, -Vector3.up, out hit, 2))
         {
+            Debug.Log(hit.transform.name);
             grounded = true;
             //sets the rotation
             skateAngleHelper.rotation = Quaternion.Lerp(skateAngleHelper.rotation, Quaternion.FromToRotation(transform.up, hit.normal) * skateAngleHelper.rotation, Time.deltaTime * skateAngleSetSpeed);

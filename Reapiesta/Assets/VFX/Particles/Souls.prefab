@@ -4827,7 +4827,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0.5776722, g: 0.9716981, b: 0.56376827, a: 1}
+      maxColor: {r: 0.36240795, g: 1, b: 0.3160377, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 0.48965502, g: 1, b: 0, a: 1}
@@ -8442,7 +8442,7 @@ ParticleSystem:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-    maxLights: 20
+    maxLights: 40
   TrailModule:
     enabled: 1
     mode: 0
@@ -8514,7 +8514,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 1, b: 1, a: 1}
+      maxColor: {r: 0.36240795, g: 1, b: 0.3160377, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
