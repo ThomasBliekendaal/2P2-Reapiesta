@@ -45,7 +45,7 @@ public class PlayerFunctions : MonoBehaviour
     [HideInInspector] public bool canSkateJump = true;
     State stateBeforeDash = State.Foot;
     [Header("Dashing")]
-    [SerializeField] GameObject[] dashEffects; 
+    [SerializeField] GameObject[] dashEffects;
     [SerializeField] float dashSpeed = 10;
     [SerializeField] Renderer[] dashInvisible;
     [SerializeField] GameObject particleDash;
@@ -53,6 +53,7 @@ public class PlayerFunctions : MonoBehaviour
     bool canDash = true;
     [HideInInspector] public float stamina = 100;
     public UIPercentBar staminaBar;
+    bool antiBounce = false;
 
     public void Start()
     {
@@ -172,7 +173,7 @@ public class PlayerFunctions : MonoBehaviour
         float input = Vector2.SqrMagnitude(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")));
         if (Physics.Raycast(transform.position, -Vector3.up, out hit, 2))
         {
-            Debug.Log(hit.transform.name);
+            //            Debug.Log(hit.transform.name);
             grounded = true;
             //sets the rotation
             skateAngleHelper.rotation = Quaternion.Lerp(skateAngleHelper.rotation, Quaternion.FromToRotation(transform.up, hit.normal) * skateAngleHelper.rotation, Time.deltaTime * skateAngleSetSpeed);
@@ -180,7 +181,7 @@ public class PlayerFunctions : MonoBehaviour
             transform.rotation = skateAngleHelper.rotation;
 
             //sets the speed
-            if (-transform.forward.y > 0)
+            if (-transform.forward.y > -0.1f)
             {
                 //accelerate
                 if (skateSpeed < -transform.forward.y * maxSkateSpeed)
@@ -191,6 +192,7 @@ public class PlayerFunctions : MonoBehaviour
                 {
                     skateSpeed = Mathf.Lerp(skateSpeed, -transform.forward.y * maxSkateSpeed, Time.deltaTime * skateDeceleration);
                 }
+                skateSpeed = Mathf.Max(0,skateSpeed);
             }
             else
             {
@@ -204,16 +206,16 @@ public class PlayerFunctions : MonoBehaviour
                     skateSpeed = Mathf.MoveTowards(skateSpeed, minSkateSpeed, Time.deltaTime * skateDeceleration);
                 }
                 // Rotator for no speed
-                if (-transform.forward.y < -0.3f && skateSpeed < 30) //< 10f && skateSpeed < 20)
+                if (-transform.forward.y < 0.6f && skateSpeed < 30) //< 10f && skateSpeed < 20)
                 {
                     if (-transform.right.y > 0)
                     {
-                        skateSpeed = 0;
+                        skateSpeed = minSkateSpeed / 100;
                         transform.Rotate(0, skateRotSpeed * Time.deltaTime, 0);
                     }
                     else
                     {
-                        skateSpeed = 0;
+                        skateSpeed = minSkateSpeed / 100;
                         transform.Rotate(0, -skateRotSpeed * Time.deltaTime, 0);
                     }
                 }
@@ -254,10 +256,20 @@ public class PlayerFunctions : MonoBehaviour
 
     }
 
+    void AntiBounceCancel()
+    {
+        antiBounce = false;
+    }
+
     void SkateLand(RaycastHit hit)
     {
         if (justSkateGrounded == false)
         {
+            if (antiBounce == false)
+            {
+                antiBounce = true;
+                Invoke("AntiBounceCancel", 0.3f);
+            }
             if (moveV3.y > 40)
             {
                 Instantiate(landingParticle, transform.position, transform.rotation, transform);
@@ -292,12 +304,13 @@ public class PlayerFunctions : MonoBehaviour
         }
     }
 
-    public void StopSkateBoost(){
-         for (int i = 0; i < dashEffects.Length; i++)
+    public void StopSkateBoost()
+    {
+        for (int i = 0; i < dashEffects.Length; i++)
         {
             dashEffects[i].SetActive(false);
         }
-        skateSpeed = minSkateSpeed / 3;
+        //   skateSpeed = minSkateSpeed / 3;
     }
 
     void SetTimeBack()
@@ -397,6 +410,11 @@ public class PlayerFunctions : MonoBehaviour
 
     public void FinalMove()
     {
+        if (antiBounce == true)
+        {
+            //This fixes the most obnoxious bug ever. Bouncing..
+            moveV3.y = Mathf.Min(moveV3.y, -1000000);
+        }
         cc.Move(moveV3 * Time.deltaTime);
     }
 }

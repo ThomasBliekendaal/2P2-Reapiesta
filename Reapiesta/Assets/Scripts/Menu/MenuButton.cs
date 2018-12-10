@@ -11,6 +11,7 @@ public class MenuButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     [SerializeField] string button = "Attack";
     [SerializeField] Text txt;
     [SerializeField] Image img;
+    [SerializeField] bool deselectClick = true;
     void Start()
     {
         StartStuff();
@@ -39,7 +40,7 @@ public class MenuButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         {
             ClickEvent();
         }
-        if (Input.GetButtonDown(button) == true)
+        if (Input.GetButtonDown(button) == true && deselectClick == true)
         {
             isOver = false;
         }
