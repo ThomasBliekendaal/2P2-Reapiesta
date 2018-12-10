@@ -12,12 +12,16 @@ public class PlayerController : MonoBehaviour
     [SerializeField] ScytheThrow scytheThrow;
     [SerializeField] ScytheAttack scytheAttack;
     PostProcessingBehaviour pp;
+    bool canBoost = true;
+    bool canDash = true;
+    [SerializeField] float dashLagTime = 0.5f;
 
     void Start()
     {
         pf = GetComponent<PlayerFunctions>();
         pp = Camera.main.GetComponent<PostProcessingBehaviour>();
         pf.StopSkateBoost();
+        canBoost = false;
     }
     void Update()
     {
@@ -26,14 +30,22 @@ public class PlayerController : MonoBehaviour
 
     void Controll()
     {
+        if (Input.GetButtonUp("Dash"))
+        {
+            canBoost = true;
+        }
         switch (pf.curState)
         {
 
             case PlayerFunctions.State.Foot:
                 pf.grounded = true;
-                // pp.profile.motionBlur.enabled = false;
+                if (pp.profile.motionBlur.enabled == true)
+                {
+                    pp.profile.motionBlur.enabled = false;
+                    pf.StopSkateBoost();
+                    canBoost = false;
+                }
                 //here
-                Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, 60, Time.deltaTime * 2);
                 pf.skateBoard.SetActive(false);
                 pf.MoveForward();
                 pf.AngleY();
@@ -45,8 +57,10 @@ public class PlayerController : MonoBehaviour
                 }
                 if (Input.GetButtonDown("Dash"))
                 {
-                    if (FindObjectOfType<Cam>().IsInvoking("SetDashFollowWait") == false)
+                    if (canDash == true)
                     {
+                        canDash = false;
+                        Invoke("SetCanDash", dashLagTime);
                         pf.StartDash();
                     }
                     // pp.profile.motionBlur.enabled = true;
@@ -76,6 +90,8 @@ public class PlayerController : MonoBehaviour
                 {
                     StaticFunctions.PlayAudio(1, false);
                     pf.curState = PlayerFunctions.State.Foot;
+                    pf.StopSkateBoost();
+                    canBoost = false;
                     transform.eulerAngles = new Vector3(0, Mathf.Atan2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y, 0);
                     Instantiate(pf.particleSkateChange, transform.position, Quaternion.Euler(90, 0, 0), transform);
                     pf.cam.MediumShake();
@@ -87,6 +103,7 @@ public class PlayerController : MonoBehaviour
                 }
                 if (Input.GetButtonDown("Dash") == true && pf.stamina > 10)
                 {
+                    canBoost = true;
                     pf.stamina -= 10;
                     if (pf.grounded == true)
                     {
@@ -96,11 +113,17 @@ public class PlayerController : MonoBehaviour
                     }
                     else
                     {
-                        pf.StartDash();
+                        if (canDash == true)
+                        {
+                            pf.StartDash();
+                            Invoke("SetCanDash", dashLagTime);
+                        }
                     }
-                    // pf.StartDash();
                 }
-                if (Input.GetAxis("Dash") != 0 && pf.stamina > 10 * Time.deltaTime)
+                // pf.StartDash();
+
+
+                if (Input.GetAxis("Dash") != 0 && pf.stamina > 10 * Time.deltaTime && canBoost == true)
                 {
                     if (pf.grounded == true)
                     {
@@ -112,8 +135,10 @@ public class PlayerController : MonoBehaviour
                 if (Input.GetButtonUp("Dash") == true || pf.grounded == false || pf.stamina < 10 * Time.deltaTime)
                 {
                     pf.StopSkateBoost();
+                    canBoost = false;
                     pp.profile.motionBlur.enabled = false;
                 }
+
                 break;
             case PlayerFunctions.State.Dash:
                 pf.dustParticles.Stop();
@@ -123,6 +148,11 @@ public class PlayerController : MonoBehaviour
         }
         pf.staminaBar.curPercent = pf.stamina;
         pf.stamina = Mathf.MoveTowards(pf.stamina, 100, Time.deltaTime * 10);
+    }
+
+    void SetCanDash()
+    {
+        canDash = true;
     }
 
 

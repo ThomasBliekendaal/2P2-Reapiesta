@@ -88,7 +88,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 224699140077220364}
-  - component: {fileID: 114892456391689880}
   m_Layer: 2
   m_Name: Crosshair
   m_TagString: Untagged
@@ -4036,6 +4035,8 @@ MonoBehaviour:
   - {fileID: 212970335652285576}
   - {fileID: 23187931438910246}
   - {fileID: 23937227596712914}
+  - {fileID: 96629102404305994}
+  - {fileID: 96482030666471964}
   particleDash: {fileID: 1603711563320466, guid: 955b6cae3a2fe984a89737bc99872a20,
     type: 2}
   landingParticle: {fileID: 1513569369627698, guid: 525b638da53c5ab4abe722178686935e,
@@ -4949,6 +4950,7 @@ MonoBehaviour:
   shoot: {fileID: 0}
   scytheThrow: {fileID: 0}
   scytheAttack: {fileID: 0}
+  dashLagTime: 0.6
 --- !u!114 &114851162742525186
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5067,21 +5069,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Item
---- !u!114 &114892456391689880
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1020065488441012}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30a8acf3be1a1ca4c8233e0e2488e33d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tranformV3: {x: 0, y: 0, z: 0}
-  eulerV3: {x: 0, y: 0, z: 68.4}
-  scaleV3: {x: 0, y: 0, z: 0}
-  speed: 1
 --- !u!114 &114898661724517000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -28988,7 +28975,7 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1020065488441012}
-  m_LocalRotation: {x: 0, y: 0, z: -0.9938772, w: -0.110491216}
+  m_LocalRotation: {x: 0, y: 0, z: 0.5, w: 0.8660254}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.40675, y: 0.40675, z: 0.40675}
   m_Children:
@@ -28999,7 +28986,7 @@ RectTransform:
   - {fileID: 224365564405499116}
   m_Father: {fileID: 224627939943578226}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 60}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}

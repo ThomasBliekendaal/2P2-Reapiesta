@@ -192,7 +192,7 @@ public class PlayerFunctions : MonoBehaviour
                 {
                     skateSpeed = Mathf.Lerp(skateSpeed, -transform.forward.y * maxSkateSpeed, Time.deltaTime * skateDeceleration);
                 }
-                skateSpeed = Mathf.Max(0,skateSpeed);
+                skateSpeed = Mathf.Max(0, skateSpeed);
             }
             else
             {
@@ -256,7 +256,7 @@ public class PlayerFunctions : MonoBehaviour
 
     }
 
-    void AntiBounceCancel()
+    public void AntiBounceCancel()
     {
         antiBounce = false;
     }
@@ -350,6 +350,8 @@ public class PlayerFunctions : MonoBehaviour
         if (Input.GetButtonDown("Jump") && cc.isGrounded == true)
         {
             moveV3.y = jumpHeight;
+            CancelInvoke("AntiBounceCancel");
+            AntiBounceCancel();
         }
     }
 
@@ -404,6 +406,7 @@ public class PlayerFunctions : MonoBehaviour
             {
                 moveV3.x = 0;
                 moveV3.z = 0;
+                transform.eulerAngles = new Vector3(transform.eulerAngles.x, newGoal, transform.eulerAngles.z);
             }
         }
     }
@@ -412,8 +415,19 @@ public class PlayerFunctions : MonoBehaviour
     {
         if (antiBounce == true)
         {
-            //This fixes the most obnoxious bug ever. Bouncing..
-            moveV3.y = Mathf.Min(moveV3.y, -1000000);
+            if (Input.GetAxis("Jump") == 0)
+            {
+                //This fixes the most obnoxious bug ever. Bouncing..
+                if (Physics.Raycast(transform.position, Vector3.down, 100, LayerMask.GetMask("Ignore Raycast", "IgnoreCam")))
+                {
+                    moveV3.y = -1000;
+                }
+            }
+            else
+            {
+                antiBounce = false;
+                CancelInvoke("AntiBounceCancel");
+            }
         }
         cc.Move(moveV3 * Time.deltaTime);
     }
