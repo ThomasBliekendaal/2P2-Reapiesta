@@ -11245,6 +11245,10 @@ Prefab:
       propertyPath: looping
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1113488786548398, guid: 96f2647d84661484386c31a4b7541ad4, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 96f2647d84661484386c31a4b7541ad4, type: 2}
   m_IsPrefabAsset: 0
@@ -11369,6 +11373,10 @@ Prefab:
       propertyPath: LightsModule.light
       value: 
       objectReference: {fileID: 1903961127}
+    - target: {fileID: 1752841336479972, guid: 7550b133543af384e84e9ae92f3ffc18, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7550b133543af384e84e9ae92f3ffc18, type: 2}
   m_IsPrefabAsset: 0
@@ -11415,6 +11423,10 @@ Prefab:
       propertyPath: m_Name
       value: GhostFire
       objectReference: {fileID: 0}
+    - target: {fileID: 1490388228736848, guid: b69319038d4a86347b0970ccc11faf22, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b69319038d4a86347b0970ccc11faf22, type: 2}
   m_IsPrefabAsset: 0
@@ -11456,6 +11468,10 @@ Prefab:
     - target: {fileID: 4681300621403886, guid: eca4c9d1003d5a84f8b5a28c2c035681, type: 2}
       propertyPath: m_RootOrder
       value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1437382136353686, guid: eca4c9d1003d5a84f8b5a28c2c035681, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eca4c9d1003d5a84f8b5a28c2c035681, type: 2}

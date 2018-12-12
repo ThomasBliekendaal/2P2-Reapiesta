@@ -282,7 +282,7 @@ public class PlayerFunctions : MonoBehaviour
                 StaticFunctions.PlayAudio(1, false);
             }
             skateSpeed /= 1.1f;
-            transform.position = hit.point + new Vector3(0, 0.1f, 0);
+            transform.position = hit.point + new Vector3(0, 0.5f, 0);
             transform.rotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
             canDash = true;
             canSkateJump = true;
@@ -293,7 +293,7 @@ public class PlayerFunctions : MonoBehaviour
 
     public void SkateBoost(bool shake)
     {
-        skateSpeed = minSkateSpeed / 1.4f;
+        skateSpeed = minSkateSpeed * 2.7f;
         if (shake == true)
         {
             cam.SmallShake();
@@ -323,12 +323,16 @@ public class PlayerFunctions : MonoBehaviour
 
     public void SkateAngleY()
     {
-        float goal = 0;
-        if (Vector2.SqrMagnitude(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"))) != 0)
-        {
-            goal += Input.GetAxis("Horizontal") * skateRotSpeed;
+        if (Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") > 0) {
+            transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(transform.localEulerAngles.x, cam.transform.eulerAngles.y, transform.localEulerAngles.z),Time.deltaTime * skateRotSpeed / 40);
+        } else {
+            float goal = 0;
+            if (Vector2.SqrMagnitude(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"))) != 0)
+            {
+                goal += Input.GetAxis("Horizontal") * skateRotSpeed;
+            }
+            transform.Rotate(0, goal * Time.deltaTime, 0);
         }
-        transform.Rotate(0, goal * Time.deltaTime, 0);
     }
 
     public void Gravity()
@@ -418,9 +422,13 @@ public class PlayerFunctions : MonoBehaviour
             if (Input.GetAxis("Jump") == 0)
             {
                 //This fixes the most obnoxious bug ever. Bouncing..
-                if (Physics.Raycast(transform.position, Vector3.down, 100, LayerMask.GetMask("Ignore Raycast", "IgnoreCam")))
+                if (Physics.Raycast(transform.position, Vector3.down, 4, LayerMask.GetMask("Ignore Raycast", "IgnoreCam")) && moveV3.y > 0)
                 {
                     moveV3.y = -1000;
+                } else
+                {
+                    antiBounce = false;
+                    CancelInvoke("AntiBounceCancel");
                 }
             }
             else

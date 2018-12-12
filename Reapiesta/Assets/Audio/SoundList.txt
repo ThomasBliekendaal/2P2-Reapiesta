@@ -1,1 +1,40 @@
 UI:
+ButtonHover
+ButtonClick
+ButtonClickDeny
+
+Enemies:
+Swipe attack
+Attack Grunt (5)
+Hurt Grunt (5)
+Death Cry (5)
+(Experiment with happy sounds for idle)
+Bone impact (for when they fall apart) 0
+Ranged throw
+Ranged impacts dependant on items (glass for one)
+Soul in-flight
+
+
+Player:
+Scythe Swipe
+Scythe Hit Enemy
+Scythe Hit Terrain
+Throw scythe
+Thrown Scythe in-flight
+Magnum Shot
+Bullet impact
+Magnum Reload
+Teleport sound effects
+Skateboard activate
+Swap weapon
+Rocket boost
+Skateboard jump
+Skateboard land
+Skateboard rolling
+Denied by lack of stamina
+One-Liners (10)
+Grunts for damage (5)
+Grunts for scythe swipes (5)
+Jump sound
+Soul Collect
+High speed wall impact

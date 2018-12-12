@@ -14,7 +14,12 @@ public class PlayerController : MonoBehaviour
     PostProcessingBehaviour pp;
     bool canBoost = true;
     bool canDash = true;
+    //set these in playerfuncion
     [SerializeField] float dashLagTime = 0.5f;
+    [SerializeField] float boostStaminaCon = 40;
+    [SerializeField] float staminaReloadTime = 30;
+    [SerializeField] float dashCon = 30;
+
 
     void Start()
     {
@@ -57,8 +62,9 @@ public class PlayerController : MonoBehaviour
                 }
                 if (Input.GetButtonDown("Dash"))
                 {
-                    if (canDash == true)
+                    if (canDash == true && pf.stamina >= dashCon)
                     {
+                        pf.stamina -= dashCon;
                         canDash = false;
                         Invoke("SetCanDash", dashLagTime);
                         pf.StartDash();
@@ -101,7 +107,7 @@ public class PlayerController : MonoBehaviour
                         pf.moveV3 = new Vector3(pf.moveV3.x, pf.jumpHeight, pf.moveV3.z);
                     }
                 }
-                if (Input.GetButtonDown("Dash") == true && pf.stamina > 10)
+                if (Input.GetButtonDown("Dash") == true && pf.stamina >= 100)
                 {
                     canBoost = true;
                     pf.stamina -= 10;
@@ -128,7 +134,7 @@ public class PlayerController : MonoBehaviour
                     if (pf.grounded == true)
                     {
                         pf.SkateBoost(true);
-                        pf.stamina -= 20 * Time.deltaTime;
+                        pf.stamina -= boostStaminaCon * Time.deltaTime;
                         pp.profile.motionBlur.enabled = true;
                     }
                 }
@@ -147,7 +153,7 @@ public class PlayerController : MonoBehaviour
                 break;
         }
         pf.staminaBar.curPercent = pf.stamina;
-        pf.stamina = Mathf.MoveTowards(pf.stamina, 100, Time.deltaTime * 10);
+        pf.stamina = Mathf.MoveTowards(pf.stamina, 100, Time.deltaTime * staminaReloadTime);
     }
 
     void SetCanDash()
