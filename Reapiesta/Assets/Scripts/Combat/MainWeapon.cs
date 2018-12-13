@@ -33,7 +33,6 @@ public class MainWeapon : MonoBehaviour
     {
         if (Input.GetButtonDown("Reload"))
         {
-            print("Reload");
             // set ammoAmount to max Ammo
             currentAmmoAmount = Clipsize;
             // trigger the UIFunction() for ammoUI
@@ -48,29 +47,25 @@ public class MainWeapon : MonoBehaviour
         {
             if (currentAmmoAmount > 0)
             {
+                //  subtract bullet
+                currentAmmoAmount--;
+                //	instantiate bullet
+                Transform newBullet = Instantiate(bullet, barrelEnd.position, barrelEnd.rotation);
+                Rigidbody addRigid = newBullet.GetComponent<Rigidbody>();
+                // trigger the UIFunction
+                UIFunction();
+                // if the raycast hit a thing
                 if (Physics.Raycast(camPos.position, camPos.forward, out hit, rayLenght))
                 {
-                    //  subtract bullet
-                    currentAmmoAmount--;
-                    //	instantiate bullet
-                    Transform newBullet = Instantiate(bullet, barrelEnd.position, barrelEnd.rotation);
-                    Rigidbody addRigid = newBullet.GetComponent<Rigidbody>();
-                    //	add force to the bullet
+                    //	move to the point the raycast hit an object
                     addRigid.velocity = (hit.point - transform.position).normalized * forceAmount;
                     addRigid.rotation = Quaternion.LookRotation(addRigid.velocity);
-                    UIFunction();
                 }
                 else
                 {
-                    //  subtract bullet
-                    currentAmmoAmount--;
-                    //	instantiate bullet
-                    Transform newBullet = Instantiate(bullet, barrelEnd.position, barrelEnd.rotation);
-                    Rigidbody addRigid = newBullet.GetComponent<Rigidbody>();
-                    //	add force to the bullet
-                    addRigid.velocity = (transform.forward - transform.position).normalized * forceAmount;
-                    addRigid.rotation = Quaternion.LookRotation(addRigid.velocity);
-                    UIFunction();
+                    // move to the point you click
+                    addRigid.AddForce(transform.forward * forceAmount *250);
+                    
                 }
             }
             if (currentAmmoAmount <= 0)

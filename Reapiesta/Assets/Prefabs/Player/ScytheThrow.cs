@@ -87,7 +87,10 @@ public class ScytheThrow : MonoBehaviour
             rend[i].enabled = false;
         }
         transform.position = player.position;
-        hurtbox.SetActive(false);
+        if (hurtbox != null)
+        {
+            hurtbox.SetActive(false);
+        }
     }
 
     void MoveToPlayer()
@@ -104,13 +107,16 @@ public class ScytheThrow : MonoBehaviour
         }
         curState = State.Normal;
         cam.SmallShake();
-        hurtbox.SetActive(true);
+        if (hurtbox != null)
+        {
+            hurtbox.SetActive(true);
+        }
         StaticFunctions.PlayAudio(4, false);
         RaycastHit hit;
         if (Physics.Raycast(transform.position, cam.transform.forward, out hit, 10, ~LayerMask.GetMask("IgnoreCam", "Ignore Raycast")))
         {
             float ySaveCam = cam.transform.eulerAngles.x;
-            cam.transform.eulerAngles = new Vector3(0,cam.transform.eulerAngles.y, cam.transform.eulerAngles.z);
+            cam.transform.eulerAngles = new Vector3(0, cam.transform.eulerAngles.y, cam.transform.eulerAngles.z);
             goal = player.position + cam.transform.forward * range + cam.transform.TransformDirection(offset);
             cam.transform.eulerAngles = new Vector3(cam.transform.eulerAngles.x, ySaveCam, cam.transform.eulerAngles.z);
             //transform.position += (transform.position - hit.point);

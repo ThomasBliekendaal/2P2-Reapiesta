@@ -8,11 +8,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eeba62b7f31a2c64d80b7cb61b48455a, type: 3}
-  m_Name: EnemyStats
+  m_Script: {fileID: 11500000, guid: 95951f751a95df149a107aa21896b249, type: 3}
+  m_Name: RangeStats
   m_EditorClassIdentifier: 
-  enemyMovement: 0
-  waveMovement: 0
-  enemyAttack: 1
-  health: 0
-  mintargetDist: 5
+  mintargetDist: 10
+  forceAmount: 25
+  bottle: {fileID: 4136694905834022, guid: e3efcb73d57bbf94186aa739e089eb2e, type: 2}
