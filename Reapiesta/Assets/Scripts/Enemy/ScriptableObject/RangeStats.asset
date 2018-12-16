@@ -13,4 +13,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mintargetDist: 10
   forceAmount: 25
+  attackSpeed: 1
   bottle: {fileID: 4136694905834022, guid: e3efcb73d57bbf94186aa739e089eb2e, type: 2}

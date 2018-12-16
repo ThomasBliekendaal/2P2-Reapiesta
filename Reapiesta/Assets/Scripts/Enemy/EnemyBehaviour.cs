@@ -9,17 +9,22 @@ using UnityEngine.AI;
 [RequireComponent(typeof(Hitbox))]
 public class EnemyBehaviour : MonoBehaviour
 {
-    [HideInInspector] public EnemyStats baseStats;
+    [HideInInspector] public BaseStats baseStats;
     [HideInInspector] public Vector3 target;
-    MoveState moveState;
     float viewRadius;
     void Start()
     {
-        GetComponent<Ground>().newStart(target);
+        if (GetComponent<Ground>())
+        {
+            GetComponent<Ground>().newStart(target);
+        }else if (GetComponent<Flying>())
+        {
+            // set target to flying component
+        }
         viewRadius = baseStats.viewRadius;
-        GetComponent<SphereCollider>().isTrigger = true;
+        GetComponent<SphereCollider>().isTrigger = baseStats.isTrigger;
         GetComponent<SphereCollider>().radius = viewRadius;
-        moveState = MoveState.idle;
+        transform.tag = baseStats.tag;
     }
 
     void Update()

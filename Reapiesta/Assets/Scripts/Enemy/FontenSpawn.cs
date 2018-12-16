@@ -12,7 +12,7 @@ public class FontenSpawn : MonoBehaviour
     [SerializeField] int amountofEnemies;
 
     [Header("Scritable Object")]
-    [SerializeField] EnemyStats baseStats;
+    [SerializeField] BaseStats baseStats;
     void Start()
     {
         SpawnEnemies();

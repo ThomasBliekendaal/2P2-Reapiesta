@@ -11,3 +11,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 106c20de2bf74ed4ca3ff34adfc92e42, type: 3}
   m_Name: GroundStats
   m_EditorClassIdentifier: 
+  walkSpeed: 4
+  runSpeed: 6

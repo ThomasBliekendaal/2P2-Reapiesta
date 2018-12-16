@@ -10,13 +10,12 @@ public class Range : MonoBehaviour
     [SerializeField] float forceAmount;
     public RangeStats rangeStats;
     Vector3 target;
-    float timer = 1;
     float currentTime;
     bool throwing;
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
-        currentTime = timer;
+        //player = GameObject.FindGameObjectWithTag("Player").transform;
+        currentTime = rangeStats.attackSpeed;
         mintargetDist = rangeStats.mintargetDist;
         forceAmount = rangeStats.forceAmount;
     }
@@ -50,8 +49,7 @@ public class Range : MonoBehaviour
             currentTime -= Time.deltaTime;
             if (currentTime <= 0)
             {
-                print("i am throwing");
-                currentTime = timer;
+                currentTime = rangeStats.attackSpeed;
                 Throw();
             }
         }

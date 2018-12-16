@@ -9,10 +9,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eeba62b7f31a2c64d80b7cb61b48455a, type: 3}
-  m_Name: BaseStats
+  m_Name: BaseStats_1
   m_EditorClassIdentifier: 
   enemyMovement: 0
   waveMovement: 0
   enemyAttack: 1
-  viewRadius: 15
+  viewRadius: 20
+  isTrigger: 1
+  tag: Enemy
+  layer:
+    serializedVersion: 2
+    m_Bits: 512
   health: 10

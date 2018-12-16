@@ -8,7 +8,7 @@ public class CheckState : MonoBehaviour
     [SerializeField] FlyingStats flyingStats;
     [SerializeField] MeleeStats meleeStats;
     [SerializeField] RangeStats rangeStats;
-    public void Checkstate(EnemyStats stats, GameObject newEnemy)
+    public void Checkstate(BaseStats stats, GameObject newEnemy)
     {
         switch (stats.enemyAttack)
         {
