@@ -5,14 +5,11 @@ using UnityEngine.AI;
 enum MoveState { idle, walking, chasing, attacking };
 public class Ground : MonoBehaviour
 {
-    MoveState moveState;
+    [SerializeField] MoveState moveState;
     public GroundStats groundStats;
     public NavMeshAgent groundAgent;
     Vector3 target;
-    void Start()
-    {
 
-    }
     public void newStart(Vector3 newtarget)
     {
         moveState = MoveState.idle;
@@ -34,10 +31,12 @@ public class Ground : MonoBehaviour
                 break;
             case MoveState.walking:
                 Walking();
+                groundAgent.speed = groundStats.walkSpeed;
                 // set the currentMovement speed to walking speed
                 break;
             case MoveState.chasing:
                 Walking();
+                groundAgent.speed = groundStats.runSpeed;
                 //set currentMovement speed to running speed
                 break;
         }
@@ -59,7 +58,7 @@ public class Ground : MonoBehaviour
         if (other.transform.tag == "Player")
         {
             // set the moveState to running
-            moveState = MoveState.walking;
+            moveState = MoveState.chasing;
             // set the target to the player
             target = other.transform.position;
         }

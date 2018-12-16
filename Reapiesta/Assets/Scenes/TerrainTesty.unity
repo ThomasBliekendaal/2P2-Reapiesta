@@ -703,6 +703,36 @@ Prefab:
       value: 
       objectReference: {fileID: 4767181137003990, guid: 10c1e940f9a536144b216a0ef8ab1348,
         type: 2}
+    - target: {fileID: 114250323596769314, guid: 6837d688b2aed804eb576d069e314737,
+        type: 2}
+      propertyPath: speed
+      value: 7.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 54872007070190830, guid: 6837d688b2aed804eb576d069e314737,
+        type: 2}
+      propertyPath: m_CollisionDetection
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114305674675146498, guid: 6837d688b2aed804eb576d069e314737,
+        type: 2}
+      propertyPath: range
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 114305674675146498, guid: 6837d688b2aed804eb576d069e314737,
+        type: 2}
+      propertyPath: returnSpeed
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 114305674675146498, guid: 6837d688b2aed804eb576d069e314737,
+        type: 2}
+      propertyPath: speed
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 54999949938162738, guid: 6837d688b2aed804eb576d069e314737,
+        type: 2}
+      propertyPath: m_CollisionDetection
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6837d688b2aed804eb576d069e314737, type: 2}
   m_IsPrefabAsset: 0

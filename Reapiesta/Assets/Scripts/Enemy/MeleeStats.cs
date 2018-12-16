@@ -4,5 +4,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "EnemyBaseStats", menuName = "Enemy/EnemyBaseStats/MeleeStats", order = 0)]
 public class MeleeStats : ScriptableObject
 {
-    public int test;
+    public float attackSpeed;
+    
 }

@@ -5,4 +5,14 @@ using UnityEngine;
 public class Melee : EnemyBehaviour
 {
     public MeleeStats meleeStats;
+
+    void Start()
+    {
+
+    }
+
+    void Update()
+    {
+
+    }
 }
