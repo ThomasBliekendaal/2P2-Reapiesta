@@ -9,14 +9,19 @@ public class PlayerFunctions : MonoBehaviour
     public CharacterController cc;
     [SerializeField]
     float speed = 10;
-    [SerializeField] float accelerationSpeed = 3;
-    [SerializeField] float decelerationSpeed = 6;
+    [SerializeField]
+    float accelerationSpeed = 3;
+    [SerializeField]
+    float decelerationSpeed = 6;
     public ParticleSystem dustParticles;
     public float jumpHeight = 10;
-    [SerializeField] float gravityStrength = -12;
-    [SerializeField] float fallDeceleration = 50;
+    [SerializeField]
+    float gravityStrength = -12;
+    [SerializeField]
+    float fallDeceleration = 50;
 
-    [HideInInspector] public Vector3 moveV3;
+    [HideInInspector]
+    public Vector3 moveV3;
     float skateSpeed = 40;
     [SerializeField]
     float skateRotSpeed = 20;
@@ -31,35 +36,71 @@ public class PlayerFunctions : MonoBehaviour
     Vector3 latePos;
     [SerializeField]
     Transform skateAngleHelper;
-    [HideInInspector] public Cam cam;
+    [HideInInspector]
+    public Cam cam;
     [Header("Skateboard Stats")]
-    [SerializeField] float maxSkateSpeed;
-    [SerializeField] float skateAcceleration;
-    [SerializeField] float skateDeceleration;
-    [SerializeField] float minSkateSpeed = 10;
-    [SerializeField] float skateAngleSetSpeed = 10;
+    [SerializeField]
+    float maxSkateSpeed;
+    [SerializeField]
+    float skateAcceleration;
+    [SerializeField]
+    float skateDeceleration;
+    [SerializeField]
+    float minSkateSpeed = 10;
+    [SerializeField]
+    float skateAngleSetSpeed = 10;
     bool justSkateGrounded = false;
-    [SerializeField] float skateJumpHeight = 50;
-    [HideInInspector] public bool grounded = false;
+    [SerializeField]
+    float skateJumpHeight = 50;
+    [HideInInspector]
+    public bool grounded = false;
     public GameObject particleSkateChange;
-    [HideInInspector] public bool canSkateJump = true;
+    [HideInInspector]
+    public bool canSkateJump = true;
     State stateBeforeDash = State.Foot;
     [Header("Dashing")]
-    [SerializeField] GameObject[] dashEffects;
-    [SerializeField] float dashSpeed = 10;
-    [SerializeField] Renderer[] dashInvisible;
-    [SerializeField] GameObject particleDash;
-    [SerializeField] GameObject landingParticle;
+    [SerializeField]
+    GameObject[] dashEffects;
+    [SerializeField]
+    float dashSpeed = 10;
+    [SerializeField]
+    Renderer[] dashInvisible;
+    [SerializeField]
+    GameObject particleDash;
+    [SerializeField]
+    GameObject landingParticle;
     bool canDash = true;
-    [HideInInspector] public float stamina = 100;
+    [HideInInspector]
+    public float stamina = 100;
     public UIPercentBar staminaBar;
     bool antiBounce = false;
+    public enum Animation
+    {
+        Idle = 0,
+        Walk = 1,
+        Jump = 2,
+        Skate = 3,
+        SkateJump = 4,
+        Shoot = 5,
+        Attack = 6,
+        Throw = 7
+    }
+    [Header("Animation")]
+    public Animation curAnim;
+    [SerializeField]
+    Animator anim;
+
+    public void UpdateAnimations()
+    {
+        anim.SetInteger("CurAnim", (int)curAnim);
+    }
 
     public void Start()
     {
         cc = GetComponent<CharacterController>();
         latePos = transform.position;
         cam = Camera.main.GetComponent<Cam>();
+        curAnim = Animation.Idle;
     }
 
     public void LateUpdate()
@@ -74,6 +115,8 @@ public class PlayerFunctions : MonoBehaviour
             grounded = false;
             if (canSkateJump == true)
             {
+                curAnim = Animation.SkateJump;
+                anim.Play("SkateFlip", 0);
                 StaticFunctions.PlayAudio(1, false);
                 curState = State.SkateBoard;
                 skateSpeed = 25;
@@ -82,13 +125,15 @@ public class PlayerFunctions : MonoBehaviour
                 skateSpeed += 25;
                 moveV3 += transform.TransformDirection(0, 0, minSkateSpeed / 5);
                 transform.position += new Vector3(0, 2.1f, 0);
-                transform.Rotate(0, 0, 180);
+                //transform.Rotate(0, 0, 180);
                 canSkateJump = false;
                 cam.MediumShake();
             }
         }
         else
         {
+            curAnim = Animation.Skate;
+            anim.Play("HopOnSkateboard", 0);
             StaticFunctions.PlayAudio(1, false);
             grounded = true;
             curState = State.SkateBoard;
@@ -149,8 +194,13 @@ public class PlayerFunctions : MonoBehaviour
 
         if (cc.isGrounded == true)
         {
+            curAnim = Animation.Skate;
             canDash = true;
             canSkateJump = true;
+        }
+        else
+        {
+            curAnim = Animation.SkateJump;
         }
 
         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, transform.localEulerAngles.y, 0), Time.deltaTime * 3);
@@ -168,6 +218,7 @@ public class PlayerFunctions : MonoBehaviour
 
     public void SkateForward()
     {
+        curAnim = Animation.Skate;
         grounded = false;
         RaycastHit hit;
         float input = Vector2.SqrMagnitude(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")));
@@ -220,10 +271,13 @@ public class PlayerFunctions : MonoBehaviour
                     }
                 }
             }
-
+            if (skateSpeed < minSkateSpeed && Input.GetAxis("Vertical") > 0)
+            {
+                skateSpeed = Mathf.Lerp(skateSpeed, maxSkateSpeed * 10, Time.deltaTime * skateAcceleration);
+            }
             //set the actual vector
             moveV3 = transform.TransformDirection(0, 0, 1) * skateSpeed;
-            //and move down
+            //and move down toward the floor like a magnet
             if (-transform.forward.y > -0.01f)
             {
                 moveV3 -= Vector3.up * 30;
@@ -323,9 +377,13 @@ public class PlayerFunctions : MonoBehaviour
 
     public void SkateAngleY()
     {
-        if (Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") > 0) {
-            transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(transform.localEulerAngles.x, cam.transform.eulerAngles.y, transform.localEulerAngles.z),Time.deltaTime * skateRotSpeed / 40);
-        } else {
+        anim.SetFloat("Blend", Mathf.Lerp(anim.GetFloat("Blend"), Input.GetAxis("Horizontal"),Time.deltaTime * 10));
+        if (Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") > 0)
+        {
+            transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(transform.localEulerAngles.x, cam.transform.eulerAngles.y, transform.localEulerAngles.z), Time.deltaTime * skateRotSpeed / 40);
+        }
+        else
+        {
             float goal = 0;
             if (Vector2.SqrMagnitude(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"))) != 0)
             {
@@ -341,6 +399,11 @@ public class PlayerFunctions : MonoBehaviour
         {
             canDash = true;
             canSkateJump = true;
+            //curAnim = Animation.Idle;
+        }
+        else if ((int)curAnim == 1 || (int)curAnim == 0 || (int)curAnim == 4)
+        {
+            curAnim = Animation.Jump;
         }
         if (moveV3.y < 0)
         {
@@ -356,6 +419,7 @@ public class PlayerFunctions : MonoBehaviour
             moveV3.y = jumpHeight;
             CancelInvoke("AntiBounceCancel");
             AntiBounceCancel();
+            curAnim = Animation.Jump;
         }
     }
 
@@ -385,9 +449,17 @@ public class PlayerFunctions : MonoBehaviour
         {
             moveV3.x = Mathf.Lerp(moveV3.x, goal.x, Time.deltaTime * accelerationSpeed);
             moveV3.z = Mathf.Lerp(moveV3.z, goal.z, Time.deltaTime * accelerationSpeed);
+            if (cc.isGrounded == true)
+            {
+                curAnim = Animation.Walk;
+            }
         }
         else
         {
+            if (cc.isGrounded == true)
+            {
+                curAnim = Animation.Idle;
+            }
             moveV3.x = Mathf.Lerp(moveV3.x, goal.x, Time.deltaTime * decelerationSpeed);
             moveV3.z = Mathf.Lerp(moveV3.z, goal.z, Time.deltaTime * decelerationSpeed);
             if (cc.isGrounded == true && Physics.Raycast(transform.position, Vector3.down, 2, ~LayerMask.GetMask("Ignore Raycast")) == false)
@@ -425,7 +497,8 @@ public class PlayerFunctions : MonoBehaviour
                 if (Physics.Raycast(transform.position, Vector3.down, 4, LayerMask.GetMask("Ignore Raycast", "IgnoreCam")) && moveV3.y > 0)
                 {
                     moveV3.y = -1000;
-                } else
+                }
+                else
                 {
                     antiBounce = false;
                     CancelInvoke("AntiBounceCancel");

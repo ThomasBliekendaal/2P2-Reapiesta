@@ -1,0 +1,14 @@
+Skeleton enemy running animation
+Skeleton enemy melee attack animation
+Skeleton enemy ranged attack animation
+Player idle animation
+Player scythe throw animation
+Player scythe swing animation(s)
+Player magnum shooting animation
+Player magnum reload animation
+Player magnum aim pose animation
+Player hop on skateboard animation
+Player on skateboard animation
+Player kickflip (jump while on skateboard) animation
+Player moving animation
+Player jumping animation
