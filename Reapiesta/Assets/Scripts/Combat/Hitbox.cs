@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Hitbox : MonoBehaviour
 {
-
     [SerializeField] float curHealth = 3;
     public int team = 0;
     public GameObject deathParticle;
@@ -34,6 +34,7 @@ public class Hitbox : MonoBehaviour
         if (curHealth <= 0)
         {
             Die();
+            GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerFunctions>().GhostPot(1);
         }
         else if (hitShake == true)
         {

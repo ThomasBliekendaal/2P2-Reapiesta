@@ -6,10 +6,10 @@ public class Range : MonoBehaviour
 {
     Transform player;
     float targetDist;
+    public Vector3 target;
     float mintargetDist;
     [SerializeField] float forceAmount;
     public RangeStats rangeStats;
-    Vector3 target;
     float currentTime;
     bool throwing;
     void Start()
@@ -22,7 +22,6 @@ public class Range : MonoBehaviour
     void Update()
     {
         //Timer();
-        CheckDist(target);
     }
     void CheckDist(Vector3 target)
     {

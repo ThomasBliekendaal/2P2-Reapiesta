@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
-
 public class Hurtbox : MonoBehaviour
 {
 
@@ -17,6 +16,7 @@ public class Hurtbox : MonoBehaviour
             if (team != hit.team)
             {
                 hit.Hit(damage);
+
                 Destroy(gameObject);
               // Debug.Log(other.name + " got hit!");
             }

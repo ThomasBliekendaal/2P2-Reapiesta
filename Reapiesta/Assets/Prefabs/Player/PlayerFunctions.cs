@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerFunctions : MonoBehaviour
@@ -89,6 +90,10 @@ public class PlayerFunctions : MonoBehaviour
     public Animation curAnim;
     [SerializeField]
     Animator anim;
+    [Header("Ghost")]
+    int ghostAmount;
+    [SerializeField] Transform ghostText;
+
 
     public void UpdateAnimations()
     {
@@ -97,6 +102,8 @@ public class PlayerFunctions : MonoBehaviour
 
     public void Start()
     {
+        ghostAmount = 0;
+        ghostText.GetComponent<Text>().text = ghostAmount.ToString();
         cc = GetComponent<CharacterController>();
         latePos = transform.position;
         cam = Camera.main.GetComponent<Cam>();
@@ -377,7 +384,7 @@ public class PlayerFunctions : MonoBehaviour
 
     public void SkateAngleY()
     {
-        anim.SetFloat("Blend", Mathf.Lerp(anim.GetFloat("Blend"), Input.GetAxis("Horizontal"),Time.deltaTime * 10));
+        anim.SetFloat("Blend", Mathf.Lerp(anim.GetFloat("Blend"), Input.GetAxis("Horizontal"), Time.deltaTime * 10));
         if (Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") > 0)
         {
             transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(transform.localEulerAngles.x, cam.transform.eulerAngles.y, transform.localEulerAngles.z), Time.deltaTime * skateRotSpeed / 40);
@@ -511,5 +518,10 @@ public class PlayerFunctions : MonoBehaviour
             }
         }
         cc.Move(moveV3 * Time.deltaTime);
+    }
+    public void GhostPot(int ghost)
+    {
+        ghostAmount = ghostAmount + ghost;
+        ghostText.GetComponent<Text>().text = ghostAmount.ToString();
     }
 }

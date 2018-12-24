@@ -10,17 +10,14 @@ using UnityEngine.AI;
 public class EnemyBehaviour : MonoBehaviour
 {
     [HideInInspector] public BaseStats baseStats;
-    [HideInInspector] public Vector3 target;
+    public Vector3 target;
+    bool trigger;
+    public float currentTime;
     float viewRadius;
     void Start()
     {
-        if (GetComponent<Ground>())
-        {
-            GetComponent<Ground>().newStart(target);
-        }else if (GetComponent<Flying>())
-        {
-            // set target to flying component
-        }
+        GetComponent<Ground>().target = target;
+        GetComponent<Range>().target = target;
         viewRadius = baseStats.viewRadius;
         GetComponent<SphereCollider>().isTrigger = baseStats.isTrigger;
         GetComponent<SphereCollider>().radius = viewRadius;
@@ -28,6 +25,11 @@ public class EnemyBehaviour : MonoBehaviour
     }
 
     void Update()
+    {
+
+    }
+
+    void Timer()
     {
 
     }

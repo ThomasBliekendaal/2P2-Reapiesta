@@ -6,14 +6,12 @@ enum MoveState { idle, walking, chasing, attacking };
 public class Ground : MonoBehaviour
 {
     [SerializeField] MoveState moveState;
+    public Vector3 target;
     public GroundStats groundStats;
     public NavMeshAgent groundAgent;
-    Vector3 target;
-
-    public void newStart(Vector3 newtarget)
+    void Start()
     {
         moveState = MoveState.idle;
-        target = newtarget;
         groundAgent = GetComponent<NavMeshAgent>();
     }
     void Update()
@@ -21,7 +19,7 @@ public class Ground : MonoBehaviour
         Check();
     }
 
-    void Check()
+    public void Check()
     {
         switch (moveState)
         {

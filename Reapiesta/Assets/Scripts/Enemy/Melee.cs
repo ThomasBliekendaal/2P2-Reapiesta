@@ -5,6 +5,8 @@ using UnityEngine;
 public class Melee : EnemyBehaviour
 {
     public MeleeStats meleeStats;
+    bool attack;
+
 
     void Start()
     {
