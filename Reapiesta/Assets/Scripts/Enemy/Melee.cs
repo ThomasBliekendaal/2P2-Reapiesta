@@ -2,19 +2,34 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Melee : EnemyBehaviour
+public class Melee : GeneralEnemyCode
 {
     public MeleeStats meleeStats;
-    bool attack;
+    public Vector3 target;
 
 
-    void Start()
+    public override void Start()
     {
-
+        base.Start();
+        targetDist = meleeStats.mintargetDist;
+        currentTime = meleeStats.attackSpeed;
     }
 
-    void Update()
+    public override void Update()
     {
+        Timer(meleeStats.attackSpeed);
+        CheckDist(target, targetDist, GetComponent<Ground>().moveState);
+    }
 
+    public override void Action()
+    {
+        if (action)
+        {
+            anim.SetBool("Action", true);
+        }
+        else
+        {
+            anim.SetBool("Action", false);
+        }
     }
 }

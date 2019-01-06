@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-enum MoveState { idle, walking, chasing, attacking };
 public class Ground : MonoBehaviour
 {
-    [SerializeField] MoveState moveState;
+    public MoveState moveState;
     public Vector3 target;
     public GroundStats groundStats;
     public NavMeshAgent groundAgent;
@@ -64,9 +63,12 @@ public class Ground : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        // set the moveState to idle
-        moveState = MoveState.idle;
-        // set the target to it self
-        target = transform.position;
+        if (other.transform.tag == "Player")
+        {
+            // set the moveState to idle
+            moveState = MoveState.idle;
+            // set the target to it self
+            target = transform.position;
+        }
     }
 }

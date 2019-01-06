@@ -14,9 +14,9 @@ MonoBehaviour:
   enemyMovement: 0
   waveMovement: 0
   enemyAttack: 0
-  viewRadius: 10
+  viewRadius: 15
   isTrigger: 1
-  tag: 
+  tag: Enemy
   layer:
     serializedVersion: 2
     m_Bits: 512

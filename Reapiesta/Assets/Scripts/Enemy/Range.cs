@@ -1,59 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
-public class Range : MonoBehaviour
+public class Range : GeneralEnemyCode
 {
     Transform player;
-    float targetDist;
     public Vector3 target;
     float mintargetDist;
     [SerializeField] float forceAmount;
     public RangeStats rangeStats;
-    float currentTime;
-    bool throwing;
-    void Start()
+    public override void Start()
     {
         //player = GameObject.FindGameObjectWithTag("Player").transform;
         currentTime = rangeStats.attackSpeed;
         mintargetDist = rangeStats.mintargetDist;
         forceAmount = rangeStats.forceAmount;
     }
-    void Update()
+    public override void Update()
     {
-        //Timer();
+        Timer(rangeStats.attackSpeed);
+        CheckDist(target, targetDist, GetComponent<Ground>().moveState);
     }
-    void CheckDist(Vector3 target)
-    {
-        // check the distance of your target
-        targetDist = Vector3.Distance(transform.position, target);
-        if (targetDist < mintargetDist)
-        {
-            throwing = true;
-            GetComponent<Ground>().groundAgent.isStopped = true;
-            // when your distance is close enough stop 
-            // change state to attcking
-        }
-        else
-        {
-            throwing = false;
-            GetComponent<Ground>().groundAgent.isStopped = false;
-        }
-    }
-
-    void Timer()
-    {
-        if (throwing)
-        {
-            currentTime -= Time.deltaTime;
-            if (currentTime <= 0)
-            {
-                currentTime = rangeStats.attackSpeed;
-                Throw();
-            }
-        }
-    }
-
     void OnTriggerEnter(Collider other)
     {
         if (other.transform.tag == "Player")
@@ -67,11 +33,11 @@ public class Range : MonoBehaviour
         if (other.transform.tag == "Player")
         {
             target = other.transform.position;
-            Timer();
+            Timer(rangeStats.attackSpeed);
         }
     }
 
-    void Throw()
+    public override void Action()
     {
         Transform newBottle = Instantiate(rangeStats.bottle, transform.position, transform.rotation);
         Rigidbody addRigid = newBottle.GetComponent<Rigidbody>();

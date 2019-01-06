@@ -16,7 +16,7 @@ public class Hurtbox : MonoBehaviour
             if (team != hit.team)
             {
                 hit.Hit(damage);
-
+                print(other.transform.name);
                 Destroy(gameObject);
               // Debug.Log(other.name + " got hit!");
             }

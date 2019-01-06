@@ -25,7 +25,7 @@ GameObject:
   - component: {fileID: 114922618641777018}
   - component: {fileID: 136882958355031376}
   - component: {fileID: 96101633155998208}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Bottle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 4656685390637006}
   - component: {fileID: 33898908045387350}
   - component: {fileID: 23511323814133946}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -59,7 +59,7 @@ GameObject:
   - component: {fileID: 4036736652948424}
   - component: {fileID: 33674519643538256}
   - component: {fileID: 23239282665849996}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
