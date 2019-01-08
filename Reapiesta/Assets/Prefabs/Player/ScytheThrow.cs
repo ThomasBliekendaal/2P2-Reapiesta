@@ -10,6 +10,7 @@ public class ScytheThrow : MonoBehaviour
     [SerializeField] float returnSpeed = 10;
     Vector3 goal;
     [SerializeField] float range = 100;
+    PlayerFunctions pf;
     public enum State
     {
         Disabled,
@@ -22,11 +23,18 @@ public class ScytheThrow : MonoBehaviour
     [SerializeField] GameObject hurtbox;
     Vector3 lastPos;
     [SerializeField] Vector3 offset = Vector3.zero;
+    [SerializeField]
+    float anticipationTime = 0.3f;
+    [SerializeField]
+    float recoverTime = 0.1f;
+
     void Start()
     {
         player = FindObjectOfType<PlayerController>().transform;
         cam = Camera.main.GetComponent<Cam>();
         lastPos = transform.position;
+        pf = player.GetComponent<PlayerFunctions>();
+
     }
 
     void Update()
@@ -35,9 +43,12 @@ public class ScytheThrow : MonoBehaviour
         {
             case State.Disabled:
                 DisabledStuff();
-                if (Input.GetButtonDown("Throw") == true)
+                if (Input.GetButtonDown("Throw") == true && pf.curState == PlayerFunctions.State.Foot)
                 {
-                    StartThrow();
+                    Invoke("StartThrow",anticipationTime);
+                    pf.curState = PlayerFunctions.State.Attack;
+                    pf.anim.Play("ScytheThrow");
+                    Invoke("SetPlayerState", anticipationTime + recoverTime);
                 }
                 break;
             case State.Normal:
@@ -51,6 +62,11 @@ public class ScytheThrow : MonoBehaviour
                 RotateScythe();
                 break;
         }
+    }
+
+    void SetPlayerState()
+    {
+        pf.curState = PlayerFunctions.State.Foot;
     }
 
     void RayCollider()
@@ -117,7 +133,7 @@ public class ScytheThrow : MonoBehaviour
         {
             float ySaveCam = cam.transform.eulerAngles.x;
             cam.transform.eulerAngles = new Vector3(0, cam.transform.eulerAngles.y, cam.transform.eulerAngles.z);
-            goal = player.position + cam.transform.forward * range + cam.transform.TransformDirection(offset);
+            goal = cam.transform.position + cam.transform.forward * range + cam.transform.TransformDirection(offset);
             cam.transform.eulerAngles = new Vector3(cam.transform.eulerAngles.x, ySaveCam, cam.transform.eulerAngles.z);
             //transform.position += (transform.position - hit.point);
             //Debug.Log("nani?");

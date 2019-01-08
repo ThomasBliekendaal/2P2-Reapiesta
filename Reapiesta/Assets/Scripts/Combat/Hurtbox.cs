@@ -8,6 +8,7 @@ public class Hurtbox : MonoBehaviour
 
     [SerializeField] float damage = 1;
     [SerializeField] int team = 0;
+   [SerializeField] bool destroyOnHit = true;
 
     void OnTriggerEnter(Collider other)
     {
@@ -17,7 +18,9 @@ public class Hurtbox : MonoBehaviour
             if (team != hit.team)
             {
                 hit.Hit(damage);
-                Destroy(gameObject);
+                if (destroyOnHit == true) {
+                    Destroy(gameObject);
+                }
               // Debug.Log(other.name + " got hit!");
             }
             else

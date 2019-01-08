@@ -29,7 +29,8 @@ public class PlayerFunctions : MonoBehaviour
     {
         Foot,
         SkateBoard,
-        Dash
+        Dash,
+        Attack
     }
     public State curState = State.Foot;
     public GameObject skateBoard;
@@ -60,6 +61,8 @@ public class PlayerFunctions : MonoBehaviour
     State stateBeforeDash = State.Foot;
     [Header("Dashing")]
     [SerializeField]
+    GameObject hurtbox;
+    [SerializeField]
     GameObject[] dashEffects;
     [SerializeField]
     float dashSpeed = 10;
@@ -87,8 +90,9 @@ public class PlayerFunctions : MonoBehaviour
     }
     [Header("Animation")]
     public Animation curAnim;
+    public Animator anim;
     [SerializeField]
-    Animator anim;
+    RuntimeAnimatorController controller;
 
     public void UpdateAnimations()
     {
@@ -101,6 +105,7 @@ public class PlayerFunctions : MonoBehaviour
         latePos = transform.position;
         cam = Camera.main.GetComponent<Cam>();
         curAnim = Animation.Idle;
+        anim.runtimeAnimatorController = controller;
     }
 
     public void LateUpdate()
@@ -140,6 +145,12 @@ public class PlayerFunctions : MonoBehaviour
             skateSpeed = 50;
             Instantiate(particleSkateChange, transform.position, Quaternion.Euler(90, 0, 0), transform);
             cam.MediumShake();
+
+            if (StaticFunctions.paused == false)
+            {
+                Time.timeScale = 0.5f;
+            }
+            Invoke("SetTimeBack", 0.1f);
         }
     }
 
@@ -156,6 +167,7 @@ public class PlayerFunctions : MonoBehaviour
                 dashInvisible[i].enabled = false;
             }
             Instantiate(particleDash, transform.position, Quaternion.identity);
+            hurtbox.SetActive(false);
             transform.eulerAngles = new Vector3(0, Mathf.Atan2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y, 0);
             moveV3 = transform.TransformDirection(0, 0, dashSpeed);
             if (grounded == false)
@@ -171,6 +183,7 @@ public class PlayerFunctions : MonoBehaviour
         if (Vector3.Distance(moveV3, Vector3.zero) < dashSpeed / 4 * 3)
         {
             Instantiate(particleDash, transform.position, Quaternion.identity);
+            hurtbox.SetActive(true);
             for (int i = 0; i < dashInvisible.Length; i++)
             {
                 dashInvisible[i].enabled = true;
@@ -187,7 +200,6 @@ public class PlayerFunctions : MonoBehaviour
             }
         }
     }
-
 
     public void SkateGravity()
     {
@@ -257,7 +269,7 @@ public class PlayerFunctions : MonoBehaviour
                     skateSpeed = Mathf.MoveTowards(skateSpeed, minSkateSpeed, Time.deltaTime * skateDeceleration);
                 }
                 // Rotator for no speed
-                if (-transform.forward.y < 0.6f && skateSpeed < 30) //< 10f && skateSpeed < 20)
+                if (-transform.forward.y < 0.6f && skateSpeed < 10) //< 10f && skateSpeed < 20)
                 {
                     if (-transform.right.y > 0)
                     {

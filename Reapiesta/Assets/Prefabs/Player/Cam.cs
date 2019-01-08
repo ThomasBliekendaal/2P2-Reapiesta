@@ -9,8 +9,9 @@ public class Cam : MonoBehaviour
     public Transform helper;
     public float speed = 10;
     public float rotSpeed = 10;
-    public float distance = 20;
-    public Vector3 offset = Vector3.zero;
+    public float[] distance;
+    public Vector3[] offset;
+    public int offsetType = 0;
     PlayerFunctions playerMov;
     Vector3 angleGoal;
 
@@ -87,7 +88,7 @@ public class Cam : MonoBehaviour
         {
             if (dashFollowWait == false)
             {
-                helper.position = Vector3.Lerp(helper.position, player.position + transform.TransformDirection(offset), Time.deltaTime * speed);
+                helper.position = Vector3.Lerp(helper.position, player.position + transform.TransformDirection(offset[offsetType]), Time.deltaTime * speed);
             }
             else if (IsInvoking("SetDashFollowWait") == false)
             {
@@ -106,7 +107,7 @@ public class Cam : MonoBehaviour
         angleGoal.x += 90;
         helper.rotation = Quaternion.Lerp(helper.rotation, Quaternion.Euler(angleGoal), Time.unscaledDeltaTime * 20);
 
-        transform.position = helper.position + helper.TransformDirection(0, 0, distance);
+        transform.position = helper.position + helper.TransformDirection(0, 0, distance[offsetType]);
         transform.LookAt(helper.position);
     }
 
@@ -131,7 +132,7 @@ public class Cam : MonoBehaviour
 
     void SkateRotate()
     {
-        helper.position = Vector3.Lerp(helper.position, player.position + transform.TransformDirection(offset), Time.deltaTime * speed * 2);
+        helper.position = Vector3.Lerp(helper.position, player.position + transform.TransformDirection(offset[offsetType]), Time.deltaTime * speed * 2);
         //  helper.eulerAngles += new Vector3(Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0) * Time.unscaledDeltaTime * rotSpeed;
         angleGoal += new Vector3(Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0) * Time.unscaledDeltaTime * rotSpeed;
         angleGoal.x -= 90;
@@ -139,7 +140,7 @@ public class Cam : MonoBehaviour
         angleGoal.x += 90;
         helper.rotation = Quaternion.Lerp(helper.rotation, Quaternion.Euler(angleGoal), Time.unscaledDeltaTime * 20);
 
-        transform.position = helper.position + helper.TransformDirection(0, 0, distance);
+        transform.position = helper.position + helper.TransformDirection(0, 0, distance[offsetType]);
         transform.LookAt(helper.position);
 
         //z axis rotation, can't Lerp it.

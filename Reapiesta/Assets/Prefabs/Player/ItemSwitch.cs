@@ -11,10 +11,15 @@ public class ItemSwitch : MonoBehaviour
     [SerializeField] ScytheThrow special;
     [SerializeField] int specialDisable = 0;
     bool scrollInUse = false;//this is used for controller input
+    [SerializeField]
+    int[] offsetType;
+    Cam cam;
+    
 
     void Start()
     {
         ui.text = transform.GetChild(curItem).name;
+        cam = Camera.main.GetComponent<Cam>();
     }
 
     void Update()
@@ -22,6 +27,12 @@ public class ItemSwitch : MonoBehaviour
         Scroll();
         SetActives();
         ActivateSpecial();
+        SetOffsetType();
+    }
+
+    void SetOffsetType()
+    {
+        cam.offsetType = offsetType[curItem];
     }
 
     void SetActives()
