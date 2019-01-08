@@ -10,24 +10,47 @@ using UnityEngine.AI;
 public class EnemyBehaviour : MonoBehaviour
 {
     [HideInInspector] public BaseStats baseStats;
-    [HideInInspector] public Vector3 target;
+    public Vector3 target;
+    bool trigger;
+    public float currentTime;
     float viewRadius;
+    GameObject sensefield;
+    LayerMask mask;
     void Start()
     {
-        if (GetComponent<Ground>())
-        {
-            GetComponent<Ground>().newStart(target);
-        }else if (GetComponent<Flying>())
-        {
-            // set target to flying component
-        }
+        mask = baseStats.layer.value;
         viewRadius = baseStats.viewRadius;
-        GetComponent<SphereCollider>().isTrigger = baseStats.isTrigger;
-        GetComponent<SphereCollider>().radius = viewRadius;
         transform.tag = baseStats.tag;
+        GetComponent<Ground>().target = target;
+        if (baseStats.enemyAttack != EnemyAttack.melee)
+        {
+            GetComponent<Range>().target = target;
+        }
+        else
+        {
+            GetComponent<Melee>().target = target;
+        }
+        Sensefield();
+    }
+    void Sensefield()
+    {
+        sensefield = new GameObject();
+        Transform field = Instantiate(sensefield, transform.position, transform.rotation).transform;
+        field.SetParent(transform);
+        field.gameObject.AddComponent(typeof(SphereCollider));
+        field.gameObject.AddComponent(typeof(SensField));
+        print(mask.value);
+        field.gameObject.layer = mask;
+        field.tag = baseStats.tag;
+        field.GetComponent<SphereCollider>().isTrigger = baseStats.isTrigger;
+        field.GetComponent<SphereCollider>().radius = viewRadius;
+    }
+    void Update()
+    {
+
     }
 
-    void Update()
+    void Timer()
     {
 
     }

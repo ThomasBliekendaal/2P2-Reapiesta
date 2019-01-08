@@ -232,7 +232,7 @@ MonoBehaviour:
   maxRadius: 20
   enemy: {fileID: 1032222954792646, guid: e0353c5005b52f24bb4b46c7fb282951, type: 2}
   amountofEnemies: 5
-  baseStats: {fileID: 11400000, guid: bfeef05cd051ee241a3c6ebfaea79261, type: 2}
+  baseStats: {fileID: 11400000, guid: 4cdcb22edb0cfee4db1efbfe68607367, type: 2}
 --- !u!114 &114933694040164376
 MonoBehaviour:
   m_ObjectHideFlags: 1

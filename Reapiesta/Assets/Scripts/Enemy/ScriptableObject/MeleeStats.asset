@@ -11,3 +11,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b312b275488541438ed9b982df3e2e5, type: 3}
   m_Name: MeleeStats
   m_EditorClassIdentifier: 
+  attackSpeed: 0.1
+  mintargetDist: 0.6

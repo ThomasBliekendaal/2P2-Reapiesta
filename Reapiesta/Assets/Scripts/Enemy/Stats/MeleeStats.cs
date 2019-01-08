@@ -5,5 +5,6 @@ using UnityEngine;
 public class MeleeStats : ScriptableObject
 {
     public float attackSpeed;
+    public float mintargetDist;
     
 }
