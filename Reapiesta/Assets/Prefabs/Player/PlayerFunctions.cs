@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerFunctions : MonoBehaviour
@@ -94,6 +95,11 @@ public class PlayerFunctions : MonoBehaviour
     [SerializeField]
     RuntimeAnimatorController controller;
 
+    [Header("Ghost")]
+    [SerializeField]
+    Transform ghostText;
+    int ghostAmount;
+
     public void UpdateAnimations()
     {
         anim.SetInteger("CurAnim", (int)curAnim);
@@ -106,6 +112,12 @@ public class PlayerFunctions : MonoBehaviour
         cam = Camera.main.GetComponent<Cam>();
         curAnim = Animation.Idle;
         anim.runtimeAnimatorController = controller;
+    }
+
+    public void GhostPot(int ghost)
+    {
+        ghostAmount = ghostAmount + ghost;
+        ghostText.GetComponent<Text>().text = ghostAmount.ToString();
     }
 
     public void LateUpdate()
@@ -389,7 +401,7 @@ public class PlayerFunctions : MonoBehaviour
 
     public void SkateAngleY()
     {
-        anim.SetFloat("Blend", Mathf.Lerp(anim.GetFloat("Blend"), Input.GetAxis("Horizontal"),Time.deltaTime * 10));
+        anim.SetFloat("Blend", Mathf.Lerp(anim.GetFloat("Blend"), Input.GetAxis("Horizontal"), Time.deltaTime * 10));
         if (Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") > 0)
         {
             transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(transform.localEulerAngles.x, cam.transform.eulerAngles.y, transform.localEulerAngles.z), Time.deltaTime * skateRotSpeed / 40);
