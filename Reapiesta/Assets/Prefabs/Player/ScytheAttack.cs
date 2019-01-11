@@ -19,15 +19,24 @@ public class ScytheAttack : MonoBehaviour
 
     void Update()
     {
-        if (plyr.pf.curState != PlayerFunctions.State.Attack)
+        if (plyr.pf.curState != PlayerFunctions.State.Dash)
         {
-            if (plyr.pf.anim.GetCurrentAnimatorStateInfo(0).IsTag("AttackEnd") == false)
+            if (plyr.pf.curState != PlayerFunctions.State.Attack)
             {
-                if (plyr.pf.anim.GetCurrentAnimatorStateInfo(0).IsTag("AttackStart") == false) {
-                    Attack();
-                } else
+                if (plyr.pf.anim.GetCurrentAnimatorStateInfo(0).IsTag("AttackEnd") == false)
                 {
-                    BufferEndAttackValues();
+                    if (plyr.pf.anim.GetCurrentAnimatorStateInfo(0).IsTag("AttackStart") == false)
+                    {
+                        Attack();
+                    }
+                    else
+                    {
+                        BufferEndAttackValues();
+                    }
+                }
+                else
+                {
+                    AttackStuff();
                 }
             }
             else
@@ -37,7 +46,8 @@ public class ScytheAttack : MonoBehaviour
         }
         else
         {
-            AttackStuff();
+            firstAtkFrame = false;
+            plyr.pf.anim.SetBool("KeepAttacking", false);
         }
     }
 
@@ -55,9 +65,6 @@ public class ScytheAttack : MonoBehaviour
 
     void AttackStuff()
     {
-        //lastTag = plyr.pf.anim.GetCurrentAnimatorStateInfo(0).tagHash.ToString();
-        //Debug.Log(plyr.pf.anim.GetCurrentAnimatorStateInfo(0).IsTag("AttackStart"));
-
         if (plyr.pf.anim.GetCurrentAnimatorStateInfo(0).IsTag("AttackStart") == true)
         {
             if (firstAtkFrame == false)
@@ -81,7 +88,7 @@ public class ScytheAttack : MonoBehaviour
         if (plyr.pf.anim.GetCurrentAnimatorStateInfo(0).IsTag("Attack"))
         {
             hurtBox.SetActive(true);
-            plyr.pf.cc.Move(plyr.transform.forward * Time.deltaTime * 10);
+            plyr.pf.cc.Move(plyr.transform.forward * Time.deltaTime * 20);
         }
         else
         {
@@ -93,13 +100,13 @@ public class ScytheAttack : MonoBehaviour
         {
             hurtBox.SetActive(false);
             plyr.pf.curState = PlayerFunctions.State.Foot;
-            plyr.pf.moveV3 = Vector3.zero;
+            plyr.pf.moveV3 = new Vector3(0, plyr.pf.moveV3.y, 0);
         }
         else if (plyr.pf.anim.GetCurrentAnimatorStateInfo(0).IsTag("AttackEnd") == true && Input.GetButtonDown("Attack") == false)
         {
             hurtBox.SetActive(false);
             plyr.pf.curState = PlayerFunctions.State.Foot;
-            plyr.pf.moveV3 = Vector3.zero;
+            plyr.pf.moveV3 = new Vector3(0, plyr.pf.moveV3.y, 0) + (plyr.transform.forward * Vector3.SqrMagnitude(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) * 2));
         }
 
         if (plyr.pf.anim.GetCurrentAnimatorStateInfo(0).IsTag("AttackEnd") == true && Input.GetButtonDown("Attack"))
@@ -109,11 +116,15 @@ public class ScytheAttack : MonoBehaviour
             firstAtkFrame = false;
             Invoke("BufferEndAttackValues", 0.2f);
         }
+        if (Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") > -0.0001f)
+        {
+            plyr.transform.eulerAngles = new Vector3(plyr.transform.eulerAngles.x, plyr.pf.cam.transform.eulerAngles.y, plyr.transform.eulerAngles.z);
+        }
     }
 
     void BufferEndAttackValues()
     {
-        if (plyr.pf.curState == PlayerFunctions.State.Foot && plyr.GetComponent<Renderer>().enabled == true)
+        if (plyr.pf.curState != PlayerFunctions.State.Dash)
         {
             plyr.pf.curState = PlayerFunctions.State.Attack;
             firstAtkFrame = false;
